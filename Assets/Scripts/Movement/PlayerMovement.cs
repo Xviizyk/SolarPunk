@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,21 +15,27 @@ public class PlayerMovement : MonoBehaviour
     private InputAction _sprintAction;
     private InputAction _sitAction;
     private InputAction _jumpAction;
+    private InputAction _dashAction;
 
     [Header("Moving system")]
-    [SerializeField] private bool _onWall;
-    [SerializeField] private bool _onGround;
+    private bool _isLeft; //0 - right, 1 - left
+    private bool _canDash = true;
+    private bool _isDashing;
+    private bool _onWall;
+    private bool _onGround;
+    private bool _isSprinting;
     private Vector2 _movingInput;
     private LayerMask GroundLayerMask;
     private LayerMask WallLayerMask;
     private float _sprintSpeed = 1f;
     public string GroundLayerName;
     public string WallLayerName;
-    public float FallingSpeed;
     public float MovingSpeed;
     public float JumpHeight;
     public float MaxFallingSpeed;
     public float SprintBooster;
+    public float DashSpeed;
+    public float DashTime;
     
     [Header("Collision system")]
     public Vector2 WallCheckLeftTopCornerHitbox;
@@ -49,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
         _movingAction = _playerActionMap.FindAction("Moving");
         _sprintAction = _playerActionMap.FindAction("Sprint");
+        _dashAction = _playerActionMap.FindAction("Dash");
         _jumpAction = _playerActionMap.FindAction("Jump");
         _sitAction = _playerActionMap.FindAction("Sit");
 
@@ -62,16 +70,23 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         HandleSprint();
-        HandleGravity();
+    }
+
+    private void FixedUpdate()
+    {
         HandleInput(); 
+        HandleGravity();
     }
 
     private void HandleInput()
     {
         _movingInput = _movingAction.ReadValue<Vector2>();
 
+        if (_dashAction.triggered && _canDash) StartCoroutine(Dash());
         if (_jumpAction.triggered) Jump();
         if (_sitAction.triggered) Sit();
+
+        _isLeft = _movingInput.x < 0 ? true : false;
 
         Move();
     }
@@ -89,19 +104,20 @@ public class PlayerMovement : MonoBehaviour
             _onGround = dist > 1f ? false : true;
         }
 
-        if (_rb.linearVelocity.y < -MaxFallingSpeed ) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, -MaxFallingSpeed);
-        if (_rb.linearVelocity.y > MaxFallingSpeed) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, MaxFallingSpeed);
+        if (_rb.linearVelocity.y < -MaxFallingSpeed && !_isDashing) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, -MaxFallingSpeed);
+        if (_rb.linearVelocity.y > MaxFallingSpeed && !_isDashing) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, MaxFallingSpeed);
     }
 
     private void HandleSprint()
     {
-        if (_sprintAction.IsPressed()) _sprintSpeed = SprintBooster;
-        else _sprintSpeed = 1f;
+        if (_sprintAction.WasPressedThisFrame()) _isSprinting = !_isSprinting;
+        _sprintSpeed = 1f;
+        if (_isSprinting) _sprintSpeed = SprintBooster;
     }
 
     private void Move()
     {
-        if (!_onWall || _onGround) _rb.linearVelocity = new Vector2(_movingInput.x * MovingSpeed * _sprintSpeed, _rb.linearVelocity.y * FallingSpeed);
+        if ((!_onWall || _onGround) && !_isDashing) _rb.linearVelocity = new Vector2(_movingInput.x * MovingSpeed * _sprintSpeed, _rb.linearVelocity.y);
     }
 
     private void Jump()
@@ -109,6 +125,27 @@ public class PlayerMovement : MonoBehaviour
         float dir = 1;
         if (_rb.linearVelocity.y > 0) dir = -dir;
         if (_onGround) _rb.AddForce(Vector3.up * JumpHeight * dir, ForceMode2D.Impulse);
+    }
+
+    private IEnumerator Dash()
+    {
+        _canDash = false;
+        _isDashing = true;
+
+        float originalGravity = _rb.gravityScale;
+        Vector2 originalLinearVelocity = _rb.linearVelocity;
+        _rb.gravityScale = 0f;
+        _rb.linearVelocity = Vector2.zero;
+
+        float dir = _isLeft ? -1 : 1;
+        _rb.linearVelocity = new Vector2(transform.localScale.x * DashSpeed * dir, 0f);
+
+        yield return new WaitForSeconds(DashTime);
+
+        _rb.gravityScale = originalGravity;
+        _rb.linearVelocity = new Vector2(originalLinearVelocity.x, 0f);
+        _canDash = true;
+        _isDashing = false;
     }
 
     private void Sit()
