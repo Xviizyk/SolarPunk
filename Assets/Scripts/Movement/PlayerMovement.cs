@@ -2,34 +2,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
 {
     [Header("Connections")]
     private Rigidbody2D _rb;
     private Collider2D _col;
     
     [Header("Actions")]
-    public InputActionAsset PlayerActionAsset;
-    private InputActionMap _playerActionMap;
-    private InputAction _movingAction;
-    private InputAction _sprintAction;
-    private InputAction _sitAction;
-    private InputAction _jumpAction;
-    private InputAction _dashAction;
+    private PlayerActions _input;
 
     [Header("Moving system")]
-    private bool _isLeft; //0 - right, 1 - left
+    private bool _isLeft;
     private bool _canDash = true;
     private bool _isDashing;
-    private bool _onWall;
-    private bool _onGround;
+    [SerializeField] private bool _onWall;
+    [SerializeField] private bool _onGround;
     private bool _isSprinting;
     private Vector2 _movingInput;
-    private LayerMask GroundLayerMask;
-    private LayerMask WallLayerMask;
+    private LayerMask CheckLayerMask;
     private float _sprintSpeed = 1f;
-    public string GroundLayerName;
-    public string WallLayerName;
     public float MovingSpeed;
     public float JumpHeight;
     public float MaxFallingSpeed;
@@ -41,93 +32,44 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 WallCheckLeftTopCornerHitbox;
     public Vector2 WallCheckRightBottomCornerHitbox;
     
-    private void Start()
+    #region Basic
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<Collider2D>();
+        _input = new PlayerActions();
 
-        WallLayerMask = LayerMask.GetMask("Wall");
-        GroundLayerMask = LayerMask.GetMask("Ground");
+        _input.PlayerInput.SetCallbacks(this);
+
+        CheckLayerMask = LayerMask.GetMask("Wall", "Ground");
     }
+
+    private void OnDestroy() => _input.Dispose();
     
-    private void OnEnable()
-    {
-        _playerActionMap = PlayerActionAsset?.FindActionMap("Player");
+    private void OnEnable() => _input.Enable();
 
-        _movingAction = _playerActionMap.FindAction("Moving");
-        _sprintAction = _playerActionMap.FindAction("Sprint");
-        _dashAction = _playerActionMap.FindAction("Dash");
-        _jumpAction = _playerActionMap.FindAction("Jump");
-        _sitAction = _playerActionMap.FindAction("Sit");
-
-        _playerActionMap.Enable();
-    }
-    private void OnDisable()
-    {
-        _playerActionMap.Disable();
-    }
-
-    private void Update()
-    {
-        HandleSprint();
-    }
+    private void OnDisable() => _input.Disable();
 
     private void FixedUpdate()
-    {
-        HandleInput(); 
+    { 
         HandleGravity();
+        WallCheck();
+        GroundCheck();
     }
+    #endregion
 
-    private void HandleInput()
-    {
-        _movingInput = _movingAction.ReadValue<Vector2>();
-
-        if (_dashAction.triggered && _canDash) StartCoroutine(Dash());
-        if (_jumpAction.triggered) Jump();
-        if (_sitAction.triggered) Sit();
-
-        _isLeft = _movingInput.x < 0 ? true : false;
-
-        Move();
-    }
+    #region Handle
 
     private void HandleGravity()
     {
-        RaycastHit2D hit = Check.CheckGround(
-            transform.position, 
-            GroundLayerMask
-        );
+        if (_rb.linearVelocity.y < -MaxFallingSpeed && !_isDashing) 
+            _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, -MaxFallingSpeed);
 
-        if (hit) {
-            float dist = Mathf.Abs(hit.point.y - transform.position.y);
-            // Debug.Log($"Hit point by y: {hit.point.y}. Distance without y position: {dist}");
-            _onGround = dist > 1f ? false : true;
-        }
-
-        if (_rb.linearVelocity.y < -MaxFallingSpeed && !_isDashing) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, -MaxFallingSpeed);
-        if (_rb.linearVelocity.y > MaxFallingSpeed && !_isDashing) _rb.linearVelocity = new Vector2( _rb.linearVelocity.x, MaxFallingSpeed);
+        if (_rb.linearVelocity.y > MaxFallingSpeed && !_isDashing) 
+            _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, MaxFallingSpeed);
     }
 
-    private void HandleSprint()
-    {
-        if (_sprintAction.WasPressedThisFrame()) _isSprinting = !_isSprinting;
-        _sprintSpeed = 1f;
-        if (_isSprinting) _sprintSpeed = SprintBooster;
-    }
-
-    private void Move()
-    {
-        if ((!_onWall || _onGround) && !_isDashing) _rb.linearVelocity = new Vector2(_movingInput.x * MovingSpeed * _sprintSpeed, _rb.linearVelocity.y);
-    }
-
-    private void Jump()
-    {
-        float dir = 1;
-        if (_rb.linearVelocity.y > 0) dir = -dir;
-        if (_onGround) _rb.AddForce(Vector3.up * JumpHeight * dir, ForceMode2D.Impulse);
-    }
-
-    private IEnumerator Dash()
+    private IEnumerator HandleDash()
     {
         _canDash = false;
         _isDashing = true;
@@ -138,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         _rb.linearVelocity = Vector2.zero;
 
         float dir = _isLeft ? -1 : 1;
-        _rb.linearVelocity = new Vector2(transform.localScale.x * DashSpeed * dir, 0f);
+        _rb.linearVelocity = new Vector2(DashSpeed * dir, 0f);
 
         yield return new WaitForSeconds(DashTime);
 
@@ -147,42 +89,75 @@ public class PlayerMovement : MonoBehaviour
         _canDash = true;
         _isDashing = false;
     }
+    #endregion
 
-    private void Sit()
+    #region OnFunctions
+    public void OnDash(InputAction.CallbackContext context)
     {
-        Debug.Log("Sit");
+        if (_canDash) 
+            StartCoroutine(HandleDash());
     }
 
-    private void CheckWall()
+    public void OnMoving(InputAction.CallbackContext context)
     {
-        _onWall = Wall();
+        _movingInput = context.ReadValue<Vector2>();
+        if ((!_onWall || _onGround) && !_isDashing)
+            _rb.linearVelocity = new Vector2(_movingInput.x * MovingSpeed * _sprintSpeed, _rb.linearVelocity.y);
+        _isLeft = _movingInput.x < 0 ? true : false;
     }
 
-    private RaycastHit2D Ground()
+    public void OnSit(InputAction.CallbackContext context) => Debug.Log("Sit");
+
+    public void OnJump(InputAction.CallbackContext context)
     {
-        return Check.CheckGround(
+        if (_onGround) 
+            _rb.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
+    }
+
+    public void OnSprint(InputAction.CallbackContext context) => _sprintSpeed = SprintBooster;
+
+    // надо потом будет разделить PlayerInput на MovementInput и CombatInput
+    public void OnLMB(InputAction.CallbackContext context) {}
+    public void OnRMB(InputAction.CallbackContext context) {}
+    public void OnReload(InputAction.CallbackContext context) {}
+    
+    #endregion
+
+    #region Collision check
+    private void GroundCheck()
+    {
+        RaycastHit2D hit = Check.CheckGround(
             transform.position, 
-            (1 << 6) | (1 << 7)
+            CheckLayerMask
         );
+
+        _onGround = hit ? false : true;
     }
 
-    private Collider2D Wall()
+    private void WallCheck()
     {
-        return Check.CheckWall(
+        Collider2D hit = Check.CheckWall(
             transform.position, 
             WallCheckLeftTopCornerHitbox.x, 
             WallCheckLeftTopCornerHitbox.y, 
             WallCheckRightBottomCornerHitbox.x, 
             WallCheckRightBottomCornerHitbox.y, 
-            (1 << 6) | (1 << 7)
+            CheckLayerMask
         );
+
+        _onWall = hit ? false : true;
     }
+    #endregion
 
     private void OnDrawGizmosSelected()
     {
-        RaycastHit2D groundHit = Ground();
-        Gizmos.color = groundHit ? Color.green : Color.red;
-        Vector3 hitPoint = groundHit ? (Vector3)groundHit.point : transform.position + Vector3.down * 2000f; 
+        RaycastHit2D hit = Check.CheckGround(
+            transform.position, 
+            CheckLayerMask
+        );
+
+        Gizmos.color = _onGround ? Color.green : Color.red;
+        Vector3 hitPoint = _onGround ? (Vector3)hit.point : transform.position + Vector3.down * 2000f; 
 
         Gizmos.DrawLine(transform.position, hitPoint);
         Gizmos.DrawWireSphere(hitPoint, 0.1f);
@@ -192,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 RightTopPoint = new Vector2(RightBottomPoint.x, LeftTopPoint.y);
         Vector2 LeftBottonPoint = new Vector2(LeftTopPoint.x, RightBottomPoint.y);
 
-        Gizmos.color = Wall() ? Color.green : Color.red;
+        Gizmos.color = WallCheck() ? Color.green : Color.red;
         Gizmos.DrawLine(LeftTopPoint, RightTopPoint);
         Gizmos.DrawLine(RightTopPoint, RightBottomPoint); 
         Gizmos.DrawLine(RightBottomPoint, LeftBottonPoint);

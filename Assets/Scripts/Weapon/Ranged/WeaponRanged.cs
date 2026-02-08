@@ -74,7 +74,7 @@ public class WeaponRanged : Weapon
 
     private void OnEnable()
     {
-        computerPlayerActions = generalActions.FindActionMap("PC");
+        computerPlayerActions = generalActions.FindActionMap("Player");
         shootAction = computerPlayerActions.FindAction("LMB");
         aimAction = computerPlayerActions.FindAction("RMB");
         shootAction.started += _ => isShooting = true;
