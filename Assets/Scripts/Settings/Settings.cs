@@ -23,4 +23,7 @@ public class Settings : MonoBehaviour
 
     [Header("Device info")]
     public DeviceType Type;
+
+    [Header("Movement settings")]
+    public bool IsSprintTogglable;
 }

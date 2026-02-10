@@ -55,6 +55,8 @@ public abstract class Weapon : MonoBehaviour
     public abstract float SplashDamage { get; }
     public abstract float Firerate { get; set; }
     public abstract float MultiplySpeed { get; set; }
+    public abstract float Spread { get; }
+    public abstract float MaxSpreadLimit { get; }
     public abstract int MaxAmount { get; }
     public abstract float SplashRadius { get; set; }
     public abstract string WeaponDescription { get; }
@@ -62,7 +64,6 @@ public abstract class Weapon : MonoBehaviour
 
     public abstract IEnumerator ReloadHandler();
     public abstract void ShootHandler();
-    public abstract void ShootAiming();
     public abstract void SpawnProjectile();
     public abstract void Rotate(); 
 }

@@ -2,63 +2,84 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
+public class PlayerMovement : MonoBehaviour, PlayerActions.IMovementInputActions
 {
     [Header("Connections")]
     private Rigidbody2D _rb;
     private Collider2D _col;
+    private Settings _set;
     
     [Header("Actions")]
     private PlayerActions _input;
 
     [Header("Moving system")]
-    private bool _isLeft;
-    private bool _canDash = true;
-    private bool _isDashing;
+    [SerializeField] private int _jumpCount;
+    [SerializeField] private bool _isLeft;
+    [SerializeField] private bool _canDash = true;
+    [SerializeField] private bool _isDashing;
     [SerializeField] private bool _onWall;
     [SerializeField] private bool _onGround;
-    private bool _isSprinting;
-    private Vector2 _movingInput;
-    private LayerMask CheckLayerMask;
-    private float _sprintSpeed = 1f;
+    [SerializeField] private bool _isSprinting;
+    [SerializeField] private Vector2 _movingInput;
+    [SerializeField] private LayerMask CheckLayerMask;
+    [SerializeField] private float _sprintSpeed = 1f;
+    public float Acceleration;
+    public float Deceleration;
     public float MovingSpeed;
     public float JumpHeight;
     public float MaxFallingSpeed;
     public float SprintBooster;
     public float DashSpeed;
     public float DashTime;
+    public int MaxJumpCount;
     
     [Header("Collision system")]
     public Vector2 WallCheckLeftTopCornerHitbox;
     public Vector2 WallCheckRightBottomCornerHitbox;
     
-    #region Basic
-    private void Awake()
+    #region Basic    
+    private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<Collider2D>();
+        _set = GetComponent<Settings>();
         _input = new PlayerActions();
 
-        _input.PlayerInput.SetCallbacks(this);
+        _input.Enable();
 
         CheckLayerMask = LayerMask.GetMask("Wall", "Ground");
+
+        _input.MovementInput.SetCallbacks(this);
     }
 
-    private void OnDestroy() => _input.Dispose();
-    
-    private void OnEnable() => _input.Enable();
-
     private void OnDisable() => _input.Disable();
+
+    private void OnDestroy() => _input.Dispose();
 
     private void FixedUpdate()
     { 
         HandleGravity();
         WallCheck();
         GroundCheck();
+        HandleMoving();
     }
     #endregion
 
     #region Handle
+    private void HandleMoving()
+    {
+        _movingInput = _input.MovementInput.Moving.ReadValue<Vector2>();
+        if (_isDashing) return;
+
+        float targetSpeed = _movingInput.x * MovingSpeed * _sprintSpeed;
+        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? Acceleration : Deceleration;
+        float newSpeed = Mathf.MoveTowards(_rb.linearVelocity.x, targetSpeed, accelRate * Time.deltaTime);
+
+        _rb.linearVelocity = new Vector2(newSpeed, _rb.linearVelocity.y);
+        
+        if (Mathf.Abs(newSpeed) > 0.01f)
+            _isLeft = newSpeed < 0;
+    }
 
     private void HandleGravity()
     {
@@ -94,33 +115,40 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
     #region OnFunctions
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (_canDash) 
+        if (_canDash && context.started) 
             StartCoroutine(HandleDash());
     }
 
     public void OnMoving(InputAction.CallbackContext context)
     {
-        _movingInput = context.ReadValue<Vector2>();
-        if ((!_onWall || _onGround) && !_isDashing)
-            _rb.linearVelocity = new Vector2(_movingInput.x * MovingSpeed * _sprintSpeed, _rb.linearVelocity.y);
-        _isLeft = _movingInput.x < 0 ? true : false;
+        // I don't want to write anything, because movement will have stopped. (Вкратце, получится фигня)
     }
 
     public void OnSit(InputAction.CallbackContext context) => Debug.Log("Sit");
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (_onGround) 
+        if (context.started) return;
+
+        if ((_onGround || _onWall) && _jumpCount > 0)
+        {
             _rb.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
+            _jumpCount--;
+        }
+
     }
 
-    public void OnSprint(InputAction.CallbackContext context) => _sprintSpeed = SprintBooster;
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (!_set.IsSprintTogglable && context.started)
+            _sprintSpeed = SprintBooster;
 
-    // надо потом будет разделить PlayerInput на MovementInput и CombatInput
-    public void OnLMB(InputAction.CallbackContext context) {}
-    public void OnRMB(InputAction.CallbackContext context) {}
-    public void OnReload(InputAction.CallbackContext context) {}
-    
+        if (!_set.IsSprintTogglable && context.canceled)
+            _sprintSpeed = 1.0f;
+
+        if (_set.IsSprintTogglable && context.started)
+            _sprintSpeed = _sprintSpeed == SprintBooster ? 1.0f : SprintBooster;
+    }
     #endregion
 
     #region Collision check
@@ -131,7 +159,9 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
             CheckLayerMask
         );
 
-        _onGround = hit ? false : true;
+        _onGround = Mathf.Abs(hit.point.y - transform.position.y) < 1.0f ? true : false;
+
+        if (_onGround) _jumpCount = MaxJumpCount;
     }
 
     private void WallCheck()
@@ -145,7 +175,9 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
             CheckLayerMask
         );
 
-        _onWall = hit ? false : true;
+        _onWall = hit ? true : false;
+
+        if (_onWall) _jumpCount = MaxJumpCount;
     }
     #endregion
 
@@ -156,7 +188,7 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
             CheckLayerMask
         );
 
-        Gizmos.color = _onGround ? Color.green : Color.red;
+        Gizmos.color = !_onGround ? Color.green : Color.red;
         Vector3 hitPoint = _onGround ? (Vector3)hit.point : transform.position + Vector3.down * 2000f; 
 
         Gizmos.DrawLine(transform.position, hitPoint);
@@ -167,7 +199,7 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IPlayerInputActions
         Vector2 RightTopPoint = new Vector2(RightBottomPoint.x, LeftTopPoint.y);
         Vector2 LeftBottonPoint = new Vector2(LeftTopPoint.x, RightBottomPoint.y);
 
-        Gizmos.color = WallCheck() ? Color.green : Color.red;
+        Gizmos.color = _onWall ? Color.green : Color.red;
         Gizmos.DrawLine(LeftTopPoint, RightTopPoint);
         Gizmos.DrawLine(RightTopPoint, RightBottomPoint); 
         Gizmos.DrawLine(RightBottomPoint, LeftBottonPoint);
