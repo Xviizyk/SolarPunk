@@ -23,8 +23,15 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IMovementInputActions
     [SerializeField] private Vector2 _movingInput;
     [SerializeField] private LayerMask CheckLayerMask;
     [SerializeField] private float _sprintSpeed = 1f;
+    public float DownGravityScale;
+    public float UpGravityScale;
     public float Acceleration;
     public float Deceleration;
+    public float GroundSpeed;
+    public float GroundFriction;
+    public float AirSpeed;
+    public float AirControl;
+    public float AirFriction;
     public float MovingSpeed;
     public float JumpHeight;
     public float MaxFallingSpeed;
@@ -61,25 +68,66 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IMovementInputActions
         HandleGravity();
         WallCheck();
         GroundCheck();
-        HandleMoving();
+        GetMovingInput();
+
+        if (_isDashing) return;
+        
+        if (_onGround)
+            GroundMove();
+        else 
+            AirMove();
+    }
+    #endregion
+
+    #region Moving system
+    private void GetMovingInput()
+    {
+        _movingInput = _input.MovementInput.Moving.ReadValue<Vector2>();
+    }
+
+    private void GroundMove()
+    {
+        float targetSpeed = _movingInput.x * GroundSpeed * _sprintSpeed;
+
+        _rb.linearVelocity = new Vector2(
+            Mathf.MoveTowards(
+                _rb.linearVelocity.x,
+                targetSpeed,
+                GroundFriction * Time.fixedDeltaTime
+            ),
+            _rb.linearVelocity.y
+        );
+    }
+
+    private void AirMove()
+    {
+        float targetSpeed = _movingInput.x * AirSpeed;
+
+        _rb.linearVelocity = new Vector2(
+            Mathf.Lerp(
+                _rb.linearVelocity.x,
+                targetSpeed,
+                AirControl * Time.fixedDeltaTime
+            ),
+            _rb.linearVelocity.y
+        );
     }
     #endregion
 
     #region Handle
-    private void HandleMoving()
-    {
-        _movingInput = _input.MovementInput.Moving.ReadValue<Vector2>();
-        if (_isDashing) return;
+    // private void HandleMoving()
+    // {
+    //     if (_isDashing) return;
 
-        float targetSpeed = _movingInput.x * MovingSpeed * _sprintSpeed;
-        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? Acceleration : Deceleration;
-        float newSpeed = Mathf.MoveTowards(_rb.linearVelocity.x, targetSpeed, accelRate * Time.deltaTime);
+    //     float targetSpeed = _movingInput.x * MovingSpeed * _sprintSpeed;
+    //     float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? Acceleration : Deceleration;
+    //     float newSpeed = Mathf.MoveTowards(_rb.linearVelocity.x, targetSpeed, accelRate * Time.deltaTime);
 
-        _rb.linearVelocity = new Vector2(newSpeed, _rb.linearVelocity.y);
+    //     _rb.linearVelocity = new Vector2(newSpeed, _rb.linearVelocity.y);
         
-        if (Mathf.Abs(newSpeed) > 0.01f)
-            _isLeft = newSpeed < 0;
-    }
+    //     if (Mathf.Abs(newSpeed) > 0.01f)
+    //         _isLeft = newSpeed < 0;
+    // }
 
     private void HandleGravity()
     {
@@ -96,19 +144,19 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IMovementInputActions
         _isDashing = true;
 
         float originalGravity = _rb.gravityScale;
-        Vector2 originalLinearVelocity = _rb.linearVelocity;
         _rb.gravityScale = 0f;
-        _rb.linearVelocity = Vector2.zero;
 
         float dir = _isLeft ? -1 : 1;
-        _rb.linearVelocity = new Vector2(DashSpeed * dir, 0f);
+
+        _rb.linearVelocity += new Vector2(dir * DashSpeed, 0f);
 
         yield return new WaitForSeconds(DashTime);
 
         _rb.gravityScale = originalGravity;
-        _rb.linearVelocity = new Vector2(originalLinearVelocity.x, 0f);
-        _canDash = true;
         _isDashing = false;
+
+        yield return new WaitForSeconds(0.2f);
+        _canDash = true;
     }
     #endregion
 
@@ -128,14 +176,18 @@ public class PlayerMovement : MonoBehaviour, PlayerActions.IMovementInputActions
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started) return;
+        if (!context.started) return;
 
-        if ((_onGround || _onWall) && _jumpCount > 0)
-        {
-            _rb.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
-            _jumpCount--;
-        }
+        if (_jumpCount <= 0) return;
 
+        _rb.linearVelocity = new Vector2(
+            _rb.linearVelocity.x,
+            0f
+        );
+
+        _rb.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
+
+        _jumpCount--;
     }
 
     public void OnSprint(InputAction.CallbackContext context)
