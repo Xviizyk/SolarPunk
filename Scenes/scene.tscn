@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://w5fx5fli32be"]
+
+[ext_resource type="Script" uid="uid://cg4kh66d73ocw" path="res://Scripts/Movement/PlayerMovement.cs" id="1_p6gg1"]
+[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_p6gg1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gf2k1"]
+radius = 32.0
+height = 90.0
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_gf2k1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lrus4"]
+size = Vector2(2.953951, 1.9169466)
+
+[node name="Template" type="Node2D" unique_id=141980405]
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=300681057]
+disable_mode = 2
+script = ExtResource("1_p6gg1")
+MaxJumpCount = 1876
+
+[node name="BodySprite" type="Node2D" parent="Player" unique_id=509476178]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player/BodySprite" unique_id=1301097893]
+texture_filter = 1
+texture_repeat = 1
+scale = Vector2(2.949, 2.7)
+sprite_frames = ExtResource("2_p6gg1")
+animation = &"Walk"
+
+[node name="MainCamera" type="Camera2D" parent="Player" unique_id=518229867]
+limit_smoothed = true
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="CapsuleCollision" type="CollisionShape2D" parent="Player" unique_id=966412675]
+shape = SubResource("CapsuleShape2D_gf2k1")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1067200145]
+position = Vector2(-4.000002, 252)
+scale = Vector2(2000, 20)
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=432100898]
+scale = Vector2(2.9624019, 2.0000126)
+texture = SubResource("CanvasTexture_gf2k1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=183463389]
+shape = SubResource("RectangleShape2D_lrus4")
