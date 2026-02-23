@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://dpedbmfi3ojtk"]
 
 [ext_resource type="Script" uid="uid://cg4kh66d73ocw" path="res://Scripts/Movement/PlayerMovement.cs" id="1_q8u6f"]
-[ext_resource type="SpriteFrames" path="res://act_1/Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_k2cbv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nusfs"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nusfs"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k2cbv"]
 radius = 30.0
@@ -14,10 +17,13 @@ size = Vector2(2.953951, 1.9169466)
 
 [node name="Act1_intruding" type="Node2D" unique_id=522237966]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=943231636]
+[node name="Player" type="CharacterBody2D" parent="." unique_id=943231636 node_paths=PackedStringArray("_animatedSprite", "_hitbox")]
 position = Vector2(0, 186)
 disable_mode = 2
 script = ExtResource("1_q8u6f")
+_animatedSprite = NodePath("BodySprite/AnimatedSprite2D")
+_hitbox = NodePath("CapsuleCollision")
+_hitboxShape = SubResource("CapsuleShape2D_nusfs")
 
 [node name="BodySprite" type="Node2D" parent="Player" unique_id=317928997]
 
@@ -25,8 +31,7 @@ script = ExtResource("1_q8u6f")
 texture_filter = 1
 texture_repeat = 1
 scale = Vector2(3, 3)
-sprite_frames = ExtResource("2_k2cbv")
-animation = &"Wall_climb_pre_waiting"
+sprite_frames = SubResource("SpriteFrames_nusfs")
 
 [node name="MainCamera" type="Camera2D" parent="Player" unique_id=867809208]
 limit_smoothed = true

@@ -6,9 +6,6 @@ public partial class PlayerMovement : CharacterBody2D
     private bool _isLeft = false;
     private bool _canDash = true;
     private bool _isDashing = false;
-    private bool _onWall = false;
-    private bool _onGround = false;
-    private bool _isSprinting = false;
 	private bool _sliding = false;
 
     private Vector2 _movingInput = Vector2.Zero;
@@ -22,9 +19,16 @@ public partial class PlayerMovement : CharacterBody2D
     private int _jumpCount = 0;
 
 	private string _lastAnimation = "Idle";
+	private string _wallState = "Normal"; /* Normal | Grab | Climb */
 
-    private AnimatedSprite2D _animatedSprite;
-	private CollisionShape2D _hitbox;
+	[Export] public RayCast2D Left_body_ray;
+	[Export] public RayCast2D Left_head_ray;
+	[Export] public RayCast2D Right_body_ray;
+	[Export] public RayCast2D Right_head_ray;
+
+    [Export] public AnimatedSprite2D _animatedSprite;
+	[Export] public CollisionShape2D _hitbox;
+	[Export] public CapsuleShape2D _hitboxShape;
     
     [Export] public float Acceleration = 1000.0f;
     [Export] public float Deceleration = 2000.0f; 
@@ -46,7 +50,7 @@ public partial class PlayerMovement : CharacterBody2D
 
 	[Export] public float WallClimbHitboxRotation = 0;
 	[Export] public float SlideHitboxRotation = 90.0f;
-	[Export] public float NormalClimbHitboxRotation = 0.0f;
+	[Export] public float NormalHitboxRotation = 0.0f;
 
     [Export] public int MaxJumpCount = 1;
 
@@ -56,31 +60,37 @@ public partial class PlayerMovement : CharacterBody2D
 	[Export] public bool AllowJump = true;
 	[Export] public bool AllowSit = true;
 
-    public override void _Ready()
-    {
-        _hitbox = GetNode<CollisionShape2D>("CollisionShape2D");
-        _animatedSprite = GetNode<AnimatedSprite2D>("BodySprite/AnimatedSprite2D");
-    }
+	public override void _Ready()
+	{
+		_animatedSprite = GetNode<AnimatedSprite2D>("BodySprite/AnimatedSprite2D");
+		_hitbox = GetNode<CollisionShape2D>("CapsuleCollision");
+		_hitboxShape = _hitbox.Shape as CapsuleShape2D;
+	}
 
     public override void _PhysicsProcess(double delta)
     {
+		if (IsOnWall())
+			GD.Print("IsOnWall is true");
+
         _delta = (float)delta;  
 		_jumpTimer -= _delta;
 
         _movingInput = Input.GetVector("Left", "Right", "Up", "Down");
 
         if (_movingInput.X != 0) 
-			_isLeft = _movingInput.X < 0 ? true : false;
+			_isLeft = _movingInput.X < 0;
 
 		if (_jumpTimer < 0.0f) 
 			_jumpTimer = 0.0f;
 
-		Animate();
+        MoveAndSlide();
         
         HandleGravity();
         HandleMove();
 
-        MoveAndSlide();
+		EdgeGrab();
+
+		Animate();
     }
 
     private void HandleMove()
@@ -91,7 +101,7 @@ public partial class PlayerMovement : CharacterBody2D
         if (_isDashing) 
             return;
 
-        if (_jumpTimer == 0.0f && AllowJump)
+        if (AllowJump)
 			OnJump();
 
         if (AllowSprint)
@@ -141,10 +151,11 @@ public partial class PlayerMovement : CharacterBody2D
 
     private void HandleGravity()
     {        
-        Velocity += GetGravity() * (float)_delta;
+        if (!_isDashing)
+			Velocity += GetGravity() * (float)_delta;
 
-        if (Velocity.Y < -MaxFallingSpeed && !_isDashing)
-            Velocity = new Vector2(Velocity.X, -MaxFallingSpeed);
+        if (IsOnFloor()) 
+            _jumpCount = MaxJumpCount;
 
         if (Velocity.Y > MaxFallingSpeed && !_isDashing)
             Velocity = new Vector2(Velocity.X, MaxFallingSpeed);
@@ -152,6 +163,9 @@ public partial class PlayerMovement : CharacterBody2D
 
     private void OnSit()
     {
+		if (_jumpTimer > 0.0f)
+			return;
+
         if (Input.IsActionPressed("Sit")) 
         {
             if (!IsOnFloor()) 
@@ -164,25 +178,22 @@ public partial class PlayerMovement : CharacterBody2D
 			}
 
             else
-                _speedMultiply = 0.5f;
+			{
+				_speedMultiply = 0.5f;
+			}
         }
     }
 
     private void OnJump()
     {
-        if (Velocity.Y >= 0 && IsOnFloor()) 
-            _jumpCount = MaxJumpCount;
-
         if (!Input.IsActionJustPressed("Jump"))
             return;
 
+		if (_jumpTimer > 0.0f)
+			return;
+
         if (_jumpCount <= 0)
             return;
-
-        Velocity = new Vector2(
-            Velocity.X,
-            0f
-        );
 
         Velocity = new Vector2(Velocity.X, JumpVelocity);
 
@@ -199,7 +210,6 @@ public partial class PlayerMovement : CharacterBody2D
                 _speedMultiply = 1.0f;
             return;
         }
-
         _speedMultiply = SprintBooster;
     }
     
@@ -208,86 +218,115 @@ public partial class PlayerMovement : CharacterBody2D
         _canDash = false;
         _isDashing = true;
 
-        float originalGravity = MotionMode == MotionModeEnum.Grounded ? 1.0f : 0.0f;
-        float dir = _isLeft ? -1f : 1f;
-
         MotionMode = MotionModeEnum.Floating;
+
+		float dir = _isLeft ? -1.0f : 1.0f;
+
         Velocity = new Vector2(dir * spd, 0f);
 
         await ToSignal(GetTree().CreateTimer(t), SceneTreeTimer.SignalName.Timeout);
         
+		if (!IsInstanceValid(this)) return;
+
         MotionMode = MotionModeEnum.Grounded;
         _isDashing = false;
 
         await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
 
+		if (!IsInstanceValid(this)) return;
+
         _canDash = true;
 		_sliding = false;
     }
 
-    private async void Animate()
-    {
-		// GD.Print($"Velocity.X: {Velocity.X}, Velocity.Y: {Velocity.Y}, _jumpTimer: {_jumpTimer}, Animation: {_animatedSprite.Animation}");
+	private void EdgeGrab()
+	{
+		if (_wallState != "Normal" || IsOnFloor() || _isDashing)
+			return;
+
+		if (!IsOnWall())
+			return;
+
+		bool canGrab =
+			(Left_body_ray.IsColliding() && !Left_head_ray.IsColliding()) ||
+			(Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
+
+		if (!canGrab)
+			return;
+
+		Velocity = Vector2.Zero;
+		PlayAnimation("Wall_climb_first");
+
+		if (Input.IsActionJustPressed("Jump"))
+		{
+			AllowJump = false;
+			EdgeClimb();
+		}
+	}
+
+	private async void EdgeClimb()
+	{
+		_wallState = "LedgeClimb";
+
+		PlayAnimation("Wall_climb_third");
+
+		await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+
+		GlobalPosition += new Vector2(_isLeft ? -20 : 20, -40);
+
+		_wallState = "Normal";
+		MotionMode = MotionModeEnum.Grounded;
+		AllowJump = true;
+	}
+
+	private void SetHitbox(Vector2 sz, Vector2 pos, float rot)
+	{
+		_hitbox.Position = pos;
+		_hitbox.RotationDegrees = rot;
+		_hitboxShape.Radius = sz.X;
+		_hitboxShape.Height = sz.Y;
+	}
+
+	private void Animate()
+	{
+		GD.Print($"Velocity.X: {Velocity.X}, Velocity.Y: {Velocity.Y}, WallState: {_wallState}, Animation: {_lastAnimation}, Right_Body_Ray: {Right_body_ray.IsColliding()}, Right_Head_Ray: {Right_head_ray.IsColliding()}, Left_body_ray: {Left_body_ray.IsColliding()}, Left_head_ray: {Left_head_ray.IsColliding()}");
 		_animatedSprite.FlipH = _isLeft;
 
-		_hitbox.Position = new Vector2(NormalHitboxPosition.X, NormalHitboxPosition.Y);
-		_hitbox.Rotation = new float(NormalClimbHitboxRotation);
-		_hitbox.Shape.Height = new float(NormalHitbox.X);
-		_hitbox.Shape.Radius = new float(NormalHitbox.Y);
-		
-		if (_isDashing)
+		if (_isDashing && _sliding)
 		{
-			GD.Print();
+			SetHitbox(SlideHitbox, SlideHitboxPosition, SlideHitboxRotation);
 		}
-
-		else if (!IsOnFloor() && !_isDashing)
-		{
-			if (Velocity.Y < 0)
-				if (_animatedSprite.Animation == "Jump" && Input.IsActionJustPressed("Jump") && AllowJump && _jumpTimer == 0 && _jumpCount != 0) 
-				{
-					_animatedSprite.Stop();
-					_animatedSprite.Play("Jump");
-				}
-				else
-					_animatedSprite.Play("Jump");
-			else
-			{
-				if (_animatedSprite.Animation == "Jump")
-					return;
-				if (_animatedSprite.Animation != "Fall_Loop" && _lastAnimation != "Jump" && _isDashing)
-					_animatedSprite.Play("Fall");
-				await ToSignal(_animatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
-				if (!IsOnFloor() && Velocity.Y > 0) 
-					_animatedSprite.Play("Fall_Loop");
-			}
-		}
-		
-		else if (!_isDashing && _lastAnimation == "Slide_begin") {
-			_animatedSprite.Play("Slide_end");
-		}
-
-		else if (_isDashing) {
-			if (_sliding) 
-			{
-				_hitbox.Position = new Vector2(SlideHitboxPosition.X, SlideHitboxPosition.Y);
-				_hitbox.Rotation = new float(SlideHitboxRotation);
-				_hitbox.Shape.height = new float(SlideHitbox.X);
-				_hitbox.Shape.radius = new float(SlideHitbox.Y);
-
-				_animatedSprite.Play("Slide_begin");
-			}
-		}
-
 		else
 		{
-			if (_isSprinting || Mathf.Abs(Velocity.X) > GroundSpeed * _speedMultiply)
-				_animatedSprite.Play("Run");
-			else if (Mathf.Abs(Velocity.X) > 0.0f)
-				_animatedSprite.Play("Walk");
-			else	
-				_animatedSprite.Play("Idle");
+			SetHitbox(NormalHitbox, NormalHitboxPosition, NormalHitboxRotation);
 		}
 
+		if (_isDashing)
+		{
+			PlayAnimation(_sliding ? "Slide_begin" : "Dash");
+			return;
+		}
+
+		if (!IsOnFloor())
+		{
+			PlayAnimation(Velocity.Y < 0 ? "Jump" : "Fall_loop");
+			return;
+		}
+
+		if (_speedMultiply > 1.0f && Mathf.Abs(Velocity.X) > 10)
+			PlayAnimation("Run");
+		else if (Mathf.Abs(Velocity.X) > 5)
+			PlayAnimation("Walk");
+		else
+			PlayAnimation("Idle");
+	}
+
+	private void PlayAnimation(string anim)
+	{
+		if (_lastAnimation == anim)
+			return;
+		
+		_animatedSprite.Play(anim);
 		_lastAnimation = _animatedSprite.Animation;
-    }
+	}
 }
