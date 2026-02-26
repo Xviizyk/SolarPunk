@@ -41,15 +41,15 @@ public partial class PlayerMovement : CharacterBody2D
 	[Export] public float JumpTimer = 0.2f;
 
 	[Export] public Vector2 WallClimbHitbox = new Vector2(20.0f, 100.0f); //Radius and Height
-	[Export] public Vector2 SlideHitbox = new Vector2(29.0f, 120.0f); //Radius and Height
-	[Export] public Vector2 NormalHitbox = new Vector2(30.0f, 90.0f); //Radius and Height
-
 	[Export] public Vector2 WallClimbHitboxPosition = new Vector2(-15.0f, 30.0f);
-	[Export] public Vector2 SlideHitboxPosition = new Vector2(0.0f, 15.0f);
-	[Export] public Vector2 NormalHitboxPosition = new Vector2(0.0f, 0.0f);
-
 	[Export] public float WallClimbHitboxRotation = 0;
+
+	[Export] public Vector2 SlideHitbox = new Vector2(29.0f, 120.0f); //Radius and Height
+	[Export] public Vector2 SlideHitboxPosition = new Vector2(0.0f, 15.0f);
 	[Export] public float SlideHitboxRotation = 90.0f;
+
+	[Export] public Vector2 NormalHitbox = new Vector2(30.0f, 90.0f); //Radius and Height
+	[Export] public Vector2 NormalHitboxPosition = new Vector2(0.0f, 0.0f);
 	[Export] public float NormalHitboxRotation = 0.0f;
 
     [Export] public int MaxJumpCount = 1;
@@ -69,8 +69,8 @@ public partial class PlayerMovement : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
-		if (IsOnWall())
-			GD.Print("IsOnWall is true");
+		// if (IsOnWall())
+		// 	GD.Print("IsOnWall is true");
 
         _delta = (float)delta;  
 		_jumpTimer -= _delta;
@@ -151,7 +151,7 @@ public partial class PlayerMovement : CharacterBody2D
 
     private void HandleGravity()
     {        
-        if (!_isDashing)
+        if (!_isDashing && AllowJump && _wallState != "Grab")
 			Velocity += GetGravity() * (float)_delta;
 
         if (IsOnFloor()) 
@@ -247,16 +247,15 @@ public partial class PlayerMovement : CharacterBody2D
 		if (!IsOnWall())
 			return;
 
-		bool canGrab =
-			(Left_body_ray.IsColliding() && !Left_head_ray.IsColliding()) ||
-			(Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
+		bool leftCanGrab = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
+		bool rightCanGrab = (Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
 
-		if (!canGrab)
+		if (!(leftCanGrab || rightCanGrab))
 			return;
 
 		Velocity = Vector2.Zero;
 		PlayAnimation("Wall_climb_first");
-
+		_wallState = "Grab";
 		if (Input.IsActionJustPressed("Jump"))
 		{
 			AllowJump = false;
@@ -266,7 +265,8 @@ public partial class PlayerMovement : CharacterBody2D
 
 	private async void EdgeClimb()
 	{
-		_wallState = "LedgeClimb";
+		SetHitbox(WallClimbHitbox, WallClimbHitboxPosition, WallClimbHitboxRotation);
+		_wallState = "Climb";
 
 		PlayAnimation("Wall_climb_third");
 
@@ -277,6 +277,7 @@ public partial class PlayerMovement : CharacterBody2D
 		_wallState = "Normal";
 		MotionMode = MotionModeEnum.Grounded;
 		AllowJump = true;
+		SetHitbox(NormalHitbox, NormalHitboxPosition, NormalHitboxRotation);
 	}
 
 	private void SetHitbox(Vector2 sz, Vector2 pos, float rot)
@@ -289,7 +290,10 @@ public partial class PlayerMovement : CharacterBody2D
 
 	private void Animate()
 	{
-		GD.Print($"Velocity.X: {Velocity.X}, Velocity.Y: {Velocity.Y}, WallState: {_wallState}, Animation: {_lastAnimation}, Right_Body_Ray: {Right_body_ray.IsColliding()}, Right_Head_Ray: {Right_head_ray.IsColliding()}, Left_body_ray: {Left_body_ray.IsColliding()}, Left_head_ray: {Left_head_ray.IsColliding()}");
+		bool leftCanGrab = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
+		bool rightCanGrab = (Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
+		GD.Print($"WallState: {_wallState}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}, Animation: {_lastAnimation}");
+		// GD.Print($"Velocity.X: {Velocity.X}, Velocity.Y: {Velocity.Y}, WallState: {_wallState}, Animation: {_lastAnimation}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}");
 		_animatedSprite.FlipH = _isLeft;
 
 		if (_isDashing && _sliding)
@@ -307,17 +311,19 @@ public partial class PlayerMovement : CharacterBody2D
 			return;
 		}
 
-		if (!IsOnFloor())
+		if (!IsOnFloor() && _lastAnimation != "Wall_climb_first")
 		{
-			PlayAnimation(Velocity.Y < 0 ? "Jump" : "Fall_loop");
+			PlayAnimation(Velocity.Y < 0 ? "Jump" : "Fall");
 			return;
 		}
 
 		if (_speedMultiply > 1.0f && Mathf.Abs(Velocity.X) > 10)
 			PlayAnimation("Run");
+
 		else if (Mathf.Abs(Velocity.X) > 5)
 			PlayAnimation("Walk");
-		else
+
+		else if (_lastAnimation != "Wall_climb_first")
 			PlayAnimation("Idle");
 	}
 

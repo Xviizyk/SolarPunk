@@ -31,9 +31,10 @@ MaxJumpCount = 1876
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player/BodySprite" unique_id=1301097893]
 texture_filter = 1
 texture_repeat = 1
-scale = Vector2(2.949, 2.7)
+scale = Vector2(3, 3)
 sprite_frames = ExtResource("2_p6gg1")
-animation = &"Walk"
+animation = &"Wall_climb_second"
+frame_progress = 0.1999967
 
 [node name="MainCamera" type="Camera2D" parent="Player" unique_id=518229867]
 limit_smoothed = true
@@ -44,21 +45,19 @@ rotation_smoothing_enabled = true
 shape = SubResource("CapsuleShape2D_gf2k1")
 
 [node name="Right_head_ray" type="RayCast2D" parent="Player" unique_id=341006877]
-position = Vector2(30, -25)
-target_position = Vector2(10, 0)
+position = Vector2(0, -25)
+target_position = Vector2(50, 0)
 collide_with_areas = true
 
 [node name="Right_body_ray" type="RayCast2D" parent="Player" unique_id=1540011284]
-position = Vector2(32.5, 0)
-target_position = Vector2(7.5, 0)
+target_position = Vector2(50, 0)
 
 [node name="Left_head_ray" type="RayCast2D" parent="Player" unique_id=1577982520]
-position = Vector2(-30, -25)
-target_position = Vector2(-10, 0)
+position = Vector2(0, -25)
+target_position = Vector2(-50, 0)
 
 [node name="Left_body_ray" type="RayCast2D" parent="Player" unique_id=2072091248]
-position = Vector2(-32.5, 0)
-target_position = Vector2(-7.5, 0)
+target_position = Vector2(-50, 0)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1067200145]
 position = Vector2(-4.000002, 252)
@@ -73,3 +72,4 @@ light_mask = 0
 position = Vector2(0.0020123117, 0)
 scale = Vector2(0.9999998, 0.9999998)
 shape = SubResource("RectangleShape2D_lrus4")
+one_way_collision_margin = 30.0

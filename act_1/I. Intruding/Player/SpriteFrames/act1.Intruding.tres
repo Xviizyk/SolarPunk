@@ -294,7 +294,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("58_tmhm1")
 }],
-"loop": true,
+"loop": false,
 "name": &"Wall_climb_first",
 "speed": 12.0
 }, {
@@ -337,7 +337,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("68_b5qpb")
 }],
-"loop": true,
+"loop": false,
 "name": &"Wall_climb_third",
 "speed": 12.0
 }, {
