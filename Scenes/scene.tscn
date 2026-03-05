@@ -34,7 +34,7 @@ texture_repeat = 1
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("2_p6gg1")
 animation = &"Wall_climb_second"
-frame_progress = 0.1999967
+frame_progress = 0.4003883
 
 [node name="MainCamera" type="Camera2D" parent="Player" unique_id=518229867]
 limit_smoothed = true

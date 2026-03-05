@@ -7,6 +7,8 @@ public partial class PlayerMovement : CharacterBody2D
     private bool _canDash = true;
     private bool _isDashing = false;
 	private bool _sliding = false;
+	private bool _isGrabbing = false;
+	private bool _printing = false;
 
     private Vector2 _movingInput = Vector2.Zero;
 
@@ -59,6 +61,7 @@ public partial class PlayerMovement : CharacterBody2D
 	[Export] public bool AllowSprint = true;
 	[Export] public bool AllowJump = true;
 	[Export] public bool AllowSit = true;
+	[Export] public bool AllowGrab = true;
 
 	public override void _Ready()
 	{
@@ -241,10 +244,7 @@ public partial class PlayerMovement : CharacterBody2D
 
 	private void EdgeGrab()
 	{
-		if (_wallState != "Normal" || IsOnFloor() || _isDashing)
-			return;
-
-		if (!IsOnWall())
+		if ((_wallState == "Normal" || IsOnFloor() || _isDashing) && !IsOnWall() && AllowGrab)
 			return;
 
 		bool leftCanGrab = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
@@ -255,12 +255,13 @@ public partial class PlayerMovement : CharacterBody2D
 
 		Velocity = Vector2.Zero;
 		PlayAnimation("Wall_climb_first");
-		_wallState = "Grab";
-		if (Input.IsActionJustPressed("Jump"))
+		if (Input.IsActionJustPressed("Jump") && !_isGrabbing)
 		{
+			_wallState = "Grab";
 			AllowJump = false;
 			EdgeClimb();
 		}
+		_wallState = "Normal";
 	}
 
 	private async void EdgeClimb()
@@ -278,6 +279,10 @@ public partial class PlayerMovement : CharacterBody2D
 		MotionMode = MotionModeEnum.Grounded;
 		AllowJump = true;
 		SetHitbox(NormalHitbox, NormalHitboxPosition, NormalHitboxRotation);
+
+		_isGrabbing = true;
+		await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
+		_isGrabbing = false;
 	}
 
 	private void SetHitbox(Vector2 sz, Vector2 pos, float rot)
@@ -292,8 +297,8 @@ public partial class PlayerMovement : CharacterBody2D
 	{
 		bool leftCanGrab = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
 		bool rightCanGrab = (Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
-		GD.Print($"WallState: {_wallState}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}, Animation: {_lastAnimation}");
-		// GD.Print($"Velocity.X: {Velocity.X}, Velocity.Y: {Velocity.Y}, WallState: {_wallState}, Animation: {_lastAnimation}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}");
+		TimedPrint($"_isGrabbing: {_isGrabbing}, WallState: {_wallState}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}, Animation: {_lastAnimation}, FPS: {1.0f / _delta}", 0.1f);
+		// GD.Print($"Velocity.X: {Velocity.X}, Veloпcity.Y: {Velocity.Y}, WallState: {_wallState}, Animation: {_lastAnimation}, leftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}");
 		_animatedSprite.FlipH = _isLeft;
 
 		if (_isDashing && _sliding)
@@ -323,7 +328,7 @@ public partial class PlayerMovement : CharacterBody2D
 		else if (Mathf.Abs(Velocity.X) > 5)
 			PlayAnimation("Walk");
 
-		else if (_lastAnimation != "Wall_climb_first")
+		else if (_wallState == "Grab")
 			PlayAnimation("Idle");
 	}
 
@@ -334,5 +339,14 @@ public partial class PlayerMovement : CharacterBody2D
 		
 		_animatedSprite.Play(anim);
 		_lastAnimation = _animatedSprite.Animation;
+	}
+
+	private async void TimedPrint(string text, float time)
+	{
+		if (_printing) return;
+		_printing = true;
+		await ToSignal(GetTree().CreateTimer(time), "timeout");
+		GD.Print(text);
+		_printing = false;
 	}
 }
