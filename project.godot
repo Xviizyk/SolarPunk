@@ -18,7 +18,7 @@ config/icon="res://Sprites/Game/Icon/icon.svg"
 
 [display]
 
-window/vsync/vsync_mode=0
+window/vsync/vsync_mode=1
 
 [dotnet]
 
