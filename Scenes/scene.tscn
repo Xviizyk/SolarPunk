@@ -4,13 +4,13 @@
 [ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_p6gg1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gf2k1"]
-radius = 32.0
-height = 90.0
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_gf2k1"]
+radius = 0.005
+height = 0.01
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lrus4"]
-size = Vector2(2.9579754, 1.9169466)
+size = Vector2(1, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_gf2k1"]
 
 [node name="Template" type="Node2D" unique_id=141980405]
 
@@ -24,6 +24,7 @@ Right_body_ray = NodePath("Right_body_ray")
 Right_head_ray = NodePath("Right_head_ray")
 _animatedSprite = NodePath("BodySprite/AnimatedSprite2D")
 _hitbox = NodePath("CapsuleCollision")
+WallGrabGlobalPsoitionPlusPlus = Vector2(40, -60)
 MaxJumpCount = 1876
 
 [node name="BodySprite" type="Node2D" parent="Player" unique_id=509476178]
@@ -43,6 +44,7 @@ rotation_smoothing_enabled = true
 
 [node name="CapsuleCollision" type="CollisionShape2D" parent="Player" unique_id=966412675]
 shape = SubResource("CapsuleShape2D_gf2k1")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="Right_head_ray" type="RayCast2D" parent="Player" unique_id=341006877]
 position = Vector2(0, -25)
@@ -60,16 +62,15 @@ target_position = Vector2(-50, 0)
 target_position = Vector2(-50, 0)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1067200145]
-position = Vector2(-4.000002, 252)
-scale = Vector2(2000, 20)
-
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=432100898]
-scale = Vector2(2.9624019, 2.0000126)
-texture = SubResource("CanvasTexture_gf2k1")
+position = Vector2(2908, 354)
+scale = Vector2(1516.8761, 18.620785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=183463389]
 light_mask = 0
-position = Vector2(0.0020123117, 0)
 scale = Vector2(0.9999998, 0.9999998)
 shape = SubResource("RectangleShape2D_lrus4")
 one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=432100898]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_gf2k1")
