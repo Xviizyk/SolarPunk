@@ -16,10 +16,6 @@ config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 run/max_fps=120
 config/icon="res://Sprites/Game/Icon/icon.svg"
 
-[display]
-
-window/vsync/vsync_mode=1
-
 [dotnet]
 
 project/assembly_name="SolarPunk"
@@ -74,6 +70,10 @@ Sit={
 [input_devices]
 
 pen_tablet/driver.windows="auto"
+
+[network]
+
+limits/debugger/max_queued_messages=128
 
 [physics]
 
