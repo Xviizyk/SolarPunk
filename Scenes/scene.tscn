@@ -15,7 +15,7 @@ size = Vector2(1, 1)
 [node name="Template" type="Node2D" unique_id=141980405]
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=300681057 node_paths=PackedStringArray("Left_body_ray", "Left_head_ray", "Right_body_ray", "Right_head_ray", "_animatedSprite", "_hitbox")]
-position = Vector2(2916, 154)
+position = Vector2(3157.824, 45.10196)
 disable_mode = 2
 script = ExtResource("1_p6gg1")
 Left_body_ray = NodePath("Left_body_ray")
@@ -87,5 +87,19 @@ shape = SubResource("RectangleShape2D_lrus4")
 one_way_collision_margin = 30.0
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D2" unique_id=514491620]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_gf2k1")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1068085022]
+position = Vector2(4393.508, -65.71478)
+scale = Vector2(1516.8761, 18.620785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1295520072]
+light_mask = 0
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_lrus4")
+one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D3" unique_id=301713119]
 scale = Vector2(-1, -1)
 texture = SubResource("CanvasTexture_gf2k1")
