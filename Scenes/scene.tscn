@@ -24,7 +24,8 @@ Right_body_ray = NodePath("Right_body_ray")
 Right_head_ray = NodePath("Right_head_ray")
 _animatedSprite = NodePath("BodySprite/AnimatedSprite2D")
 _hitbox = NodePath("CapsuleCollision")
-WallGrabGlobalPsoitionPlusPlus = Vector2(40, -60)
+WallClimbHitboxPosition = Vector2(15, 33)
+WallClimbGlobalPositionMove = 25.0
 MaxJumpCount = 1876
 
 [node name="BodySprite" type="Node2D" parent="Player" unique_id=509476178]
@@ -72,5 +73,19 @@ shape = SubResource("RectangleShape2D_lrus4")
 one_way_collision_margin = 30.0
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=432100898]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_gf2k1")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=479709461]
+position = Vector2(3650.0002, 138)
+scale = Vector2(-33.977528, -427.4126)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1474757709]
+light_mask = 0
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_lrus4")
+one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D2" unique_id=514491620]
 scale = Vector2(-1, -1)
 texture = SubResource("CanvasTexture_gf2k1")

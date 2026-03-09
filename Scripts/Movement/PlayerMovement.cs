@@ -4,7 +4,7 @@ using System;
 public partial class PlayerMovement : CharacterBody2D
 {
     private bool _canDash = true;
-
+	private bool _moved = false;
 	private bool _isGrabbed = false;
     private bool _isLeft = false;
     private bool _isDashing = false;
@@ -45,9 +45,11 @@ public partial class PlayerMovement : CharacterBody2D
     [Export] public float DashTime = 0.2f;
 	[Export] public float JumpTimer = 0.2f;
 
-	[Export] public Vector2 WallClimbHitbox = new Vector2(20.0f, 100.0f); //Radius and Height
-	[Export] public Vector2 WallClimbHitboxPosition = new Vector2(-15.0f, 30.0f);
-	[Export] public float WallClimbHitboxRotation = 0;
+	[Export] public Vector2 WallClimbingHitbox = new Vector2(20.0f, 100.0f); //Radius and Height
+	[Export] public Vector2 WallClimbingHitboxPosition = new Vector2(-45.0f, -52.0f);
+	[Export] public Vector2 WallClimbHitboxPosition = new Vector2(15.0f, 30.0f);
+	[Export] public float WallClimbingHitboxRotation = 0;
+	[Export] public float WallClimbGlobalPositionMove = -15.0f;
 
 	[Export] public Vector2 SlideHitbox = new Vector2(29.0f, 120.0f); //Radius and Height
 	[Export] public Vector2 SlideHitboxPosition = new Vector2(0.0f, 15.0f);
@@ -57,7 +59,7 @@ public partial class PlayerMovement : CharacterBody2D
 	[Export] public Vector2 NormalHitboxPosition = new Vector2(0.0f, 0.0f);
 	[Export] public float NormalHitboxRotation = 0.0f;
 
-	[Export] public Vector2 WallGrabGlobalPsoitionPlusPlus = new Vector2(20.0f, -40.0f);
+	[Export] public Vector2 WallGrabGlobalPsoitionPlusPlus = new Vector2(40.0f, -55.0f);
 
     [Export] public int MaxJumpCount = 1;
 
@@ -81,16 +83,15 @@ public partial class PlayerMovement : CharacterBody2D
         _delta = (float)delta;  
 		_jumpTimer -= _delta;
 
-		if (IsOnFloor())
-			_isGrabbed = false;
-
         _movingInput = Input.GetVector("Left", "Right", "Up", "Down");
 
         if (_movingInput.X != 0)
 			_isLeft = _movingInput.X < 0;
+			
 
 		if (_isGrabbed && Velocity == Vector2.Zero)
 			_isLeft = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
+
 
 		if (_jumpTimer < 0.0f) 
 			_jumpTimer = 0.0f;
@@ -101,9 +102,15 @@ public partial class PlayerMovement : CharacterBody2D
 
 		EdgeGrab();
 
+		if (IsOnFloor())
+			_isGrabbed = false;
+
 		if (_animatedSprite.Animation != "Wall_climb_third")
 			Animate();
-		else if (_animatedSprite.Frame == _spriteFrames.GetFrameCount(_animatedSprite.Animation)) {}
+
+		else if (_animatedSprite.Frame+1 == _spriteFrames.GetFrameCount(_animatedSprite.Animation))
+			Animate();
+
         MoveAndSlide();
     }
 
@@ -266,11 +273,17 @@ public partial class PlayerMovement : CharacterBody2D
 			return;
 
 		Velocity = Vector2.Zero;
+
 		if (!_isGrabbing)
+		{
 			PlayAnimation("Wall_climb_first");
+			SetHitbox(WallClimbingHitbox, WallClimbHitboxPosition * new Vector2(_isLeft ? 1 : -1, 1.0f), NormalHitboxRotation);
+			GlobalPosition += new Vector2(_moved ? 0 : WallClimbGlobalPositionMove * (_isLeft ? -1 : 1), 0.0f);
+			_moved = true;
+		}
 		if (Input.IsActionJustPressed("Jump") && !_isGrabbing)
 		{
-			_wallState = "Grab";
+			SetHitbox(NormalHitbox, WallClimbingHitboxPosition * new Vector2(_isLeft ? 1 : -1, 1.0f), NormalHitboxRotation);_wallState = "Grab";
 			AllowJump = false;
 			EdgeClimb();
 		}
@@ -279,15 +292,14 @@ public partial class PlayerMovement : CharacterBody2D
 
 	private async void EdgeClimb()
 	{
-		SetHitbox(WallClimbHitbox, WallClimbHitboxPosition, WallClimbHitboxRotation);
 		_wallState = "Climb";
 		_isGrabbing = true;
 
 		PlayAnimation("Wall_climb_third");
 
-		await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+		await ToSignal(GetTree().CreateTimer(_spriteFrames.GetFrameCount("Wall_climb_third") * Mathf.Abs(_animatedSprite.GetPlayingSpeed())), "timeout");
 
-		GlobalPosition += new Vector2(_isLeft ? -WallGrabGlobalPsoitionPlusPlus.X : WallGrabGlobalPsoitionPlusPlus.X, WallGrabGlobalPsoitionPlusPlus.Y);
+		GlobalPosition += new Vector2(WallGrabGlobalPsoitionPlusPlus.X * (_isLeft ? -1 : 1), WallGrabGlobalPsoitionPlusPlus.Y);
 
 		_wallState = "Normal";
 		MotionMode = MotionModeEnum.Grounded;
@@ -295,6 +307,7 @@ public partial class PlayerMovement : CharacterBody2D
 		SetHitbox(NormalHitbox, NormalHitboxPosition, NormalHitboxRotation);
 		_isGrabbing = false;
 		_isGrabbed = false;
+		_moved = false;
 		await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
 	}
 
@@ -319,7 +332,7 @@ public partial class PlayerMovement : CharacterBody2D
 		{
 			SetHitbox(SlideHitbox, SlideHitboxPosition, SlideHitboxRotation);
 		}
-		else
+		else if (!_isGrabbed)
 		{
 			SetHitbox(NormalHitbox, NormalHitboxPosition, NormalHitboxRotation);
 		}
@@ -330,7 +343,7 @@ public partial class PlayerMovement : CharacterBody2D
 			return;
 		}
 
-		if (!IsOnFloor() && _lastAnimation != "Wall_climb_first")
+		if (!IsOnFloor() && _lastAnimation != "Wall_climb_first" && _lastAnimation != "Wall_climb_third")
 		{
 			PlayAnimation(Velocity.Y < 0 ? "Jump" : "Fall");
 			return;
@@ -342,9 +355,8 @@ public partial class PlayerMovement : CharacterBody2D
 		else if (Mathf.Abs(Velocity.X) > 5)
 			PlayAnimation("Walk");
 
-		else if (_wallState == "Normal" && !_isGrabbed)
+		else if (_wallState == "Normal" && (!_isGrabbed || IsOnFloor()))
 			PlayAnimation("Idle");
-
 		}
 
 	private void PlayAnimation(string anim)
