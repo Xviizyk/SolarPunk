@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://b030a73tjm55x"]
+
+[ext_resource type="PackedScene" uid="uid://bmxv58g215up7" path="res://act_1/I. Intruding/Player/Prefab/PlayerPrefab.tscn" id="1_766q3"]
+[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_aabkw"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_rahb2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_evsvw"]
+size = Vector2(1, 1)
+
+[node name="Main" type="Node2D" unique_id=1295066412]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1680925906]
+position = Vector2(-452.80225, -1156.8077)
+rotation = -3.1415925
+scale = Vector2(13227.881, -6693.899)
+texture = SubResource("CanvasTexture_rahb2")
+
+[node name="Player" parent="." unique_id=1889824967 instance=ExtResource("1_766q3")]
+_spriteFrames = ExtResource("2_aabkw")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=430840102]
+position = Vector2(3.1296387, 1216.1018)
+scale = Vector2(9897.3, -1945.1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1385043438]
+light_mask = 0
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_evsvw")
+one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor" unique_id=2070777323]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_rahb2")
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=506830127]
+position = Vector2(-5988.1406, -1156.8079)
+scale = Vector2(2172.7, -6693.9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=1734806016]
+light_mask = 0
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_evsvw")
+one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="LeftWall" unique_id=380429950]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_rahb2")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=1475534550]
+position = Vector2(5074.788, -1156.8079)
+scale = Vector2(2172.7, -6693.9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=948561789]
+light_mask = 0
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_evsvw")
+one_way_collision_margin = 30.0
+
+[node name="Sprite2D" type="Sprite2D" parent="RightWall" unique_id=975040321]
+scale = Vector2(-1, -1)
+texture = SubResource("CanvasTexture_rahb2")
+
+[node name="SceneMaster" type="Node2D" parent="." unique_id=315865197]

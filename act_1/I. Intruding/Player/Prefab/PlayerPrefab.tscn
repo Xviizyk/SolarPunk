@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://bmxv58g215up7"]
+
+[ext_resource type="Script" uid="uid://cg4kh66d73ocw" path="res://Scripts/Movement/PlayerMovement.cs" id="1_1vlsb"]
+[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_5p7jt"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gf2k1"]
+radius = 0.005
+height = 0.01
+
+[node name="Player" type="CharacterBody2D" unique_id=1889824967 node_paths=PackedStringArray("Left_body_ray", "Left_head_ray", "Right_body_ray", "Right_head_ray", "_animatedSprite", "_hitbox")]
+disable_mode = 2
+script = ExtResource("1_1vlsb")
+Left_body_ray = NodePath("Left_body_ray")
+Left_head_ray = NodePath("Left_head_ray")
+Right_body_ray = NodePath("Right_body_ray")
+Right_head_ray = NodePath("Right_head_ray")
+_animatedSprite = NodePath("BodySprite/AnimatedSprite2D")
+_hitbox = NodePath("CapsuleCollision")
+WallClimbHitboxPosition = Vector2(15, 33)
+WallClimbGlobalPositionMove = 25.0
+MaxJumpCount = 1876
+
+[node name="BodySprite" type="Node2D" parent="." unique_id=820344618]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="BodySprite" unique_id=1837798567]
+texture_filter = 1
+texture_repeat = 1
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("2_5p7jt")
+animation = &"Wall_climb_second"
+frame_progress = 0.4003883
+
+[node name="MainCamera" type="Camera2D" parent="." unique_id=2107364585]
+limit_smoothed = true
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="CapsuleCollision" type="CollisionShape2D" parent="." unique_id=1408223552]
+shape = SubResource("CapsuleShape2D_gf2k1")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
+
+[node name="Right_head_ray" type="RayCast2D" parent="." unique_id=1058514828]
+position = Vector2(0, -25)
+target_position = Vector2(50, 0)
+collide_with_areas = true
+
+[node name="Right_body_ray" type="RayCast2D" parent="." unique_id=1750338783]
+target_position = Vector2(50, 0)
+
+[node name="Left_head_ray" type="RayCast2D" parent="." unique_id=1070560150]
+position = Vector2(0, -25)
+target_position = Vector2(-50, 0)
+
+[node name="Left_body_ray" type="RayCast2D" parent="." unique_id=184029518]
+target_position = Vector2(-50, 0)
