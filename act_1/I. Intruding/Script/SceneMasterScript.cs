@@ -1,16 +1,19 @@
 using Godot;
-using System;
 
-[Export] public Sprite2D RightGroundGradient;
-[Export] public Sprite2D LeftGroundGradient;
+[Export] public Node2D GradientObject;
 [Export] public CharacterBody2D Player;
-
-private Vector2 _input = (0.0f, 0.0f);
+[Export] public MaxDistanceGlobalPosition = 1000.0f;
 
 public partial class SceneMasterScript : Node2D
 {
 	public override void _PhysicsProcess(double delta)
 	{
-		_input = Input.GetVector("Left", "Right", "Up", "Down");
+		GradientObject.GlobalPosition = new Vector2(Player.GlobalPosition.X, GradientObject.GlobalPosition.Y);
+
+        if (Player.GlobalPosition.X > MaxDistanceFromCenter)
+            Player.GlobalPosition = new Vector2(-MaxDistanceGlobalPosition+10.0f, Player.GlobalPosition.Y
+        
+        if (Player.GlobalPosition.X < -MaxDistanceFromCenter)
+            Player.GlobalPosition = new Vector2(MaxDistanceGlobalPosition-10.0f, Player.GlobalPosition.Y);
 	}
 }
