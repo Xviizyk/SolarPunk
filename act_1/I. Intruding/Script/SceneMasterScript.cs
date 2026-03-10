@@ -17,16 +17,5 @@ public partial class SceneMasterScript : Node2D
 		
 		if (Player.GlobalPosition.X < -MaxDistanceFromCenter)
 			Player.GlobalPosition = new Vector2(MaxDistanceFromCenter-10.0f, Player.GlobalPosition.Y);
-
-		TimedPrint($"Player: {Player.GlobalPosition}\nGradient: {GradientObject.GlobalPosition}\n\n", 0.5f);
-	}
-
-	private async void TimedPrint(string text, float time)
-	{
-		if (_printing) return;
-		_printing = true;
-		await ToSignal(GetTree().CreateTimer(time), "timeout");
-		GD.Print(text);
-		_printing = false;
 	}
 }

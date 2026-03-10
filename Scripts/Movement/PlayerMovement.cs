@@ -70,6 +70,8 @@ public partial class PlayerMovement : CharacterBody2D
 	[Export] public bool AllowSit = true;
 	[Export] public bool AllowGrab = true;
 
+	public bool InputLock { get; set; } = false;
+
 	public override void _Ready()
 	{
 		_animatedSprite = GetNode<AnimatedSprite2D>("BodySprite/AnimatedSprite2D");
@@ -96,7 +98,8 @@ public partial class PlayerMovement : CharacterBody2D
 		if (_jumpTimer < 0.0f) 
 			_jumpTimer = 0.0f;
 
-        
+		if (InputLock) return;
+
         HandleGravity();
         HandleMove();
 
