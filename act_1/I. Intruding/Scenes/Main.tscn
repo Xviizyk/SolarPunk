@@ -2,11 +2,24 @@
 
 [ext_resource type="PackedScene" uid="uid://bmxv58g215up7" path="res://act_1/I. Intruding/Player/Prefab/PlayerPrefab.tscn" id="1_766q3"]
 [ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_aabkw"]
+[ext_resource type="Script" uid="uid://bc0l34htuda7h" path="res://act_1/I. Intruding/Script/SceneMasterScript.cs" id="3_evsvw"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_rahb2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_evsvw"]
 size = Vector2(1, 1)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_evsvw"]
+
+[sub_resource type="Gradient" id="Gradient_rahb2"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_aeo36"]
+gradient = SubResource("Gradient_rahb2")
+
+[sub_resource type="Gradient" id="Gradient_6vni2"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_snd00"]
+gradient = SubResource("Gradient_6vni2")
 
 [node name="Main" type="Node2D" unique_id=1295066412]
 
@@ -17,6 +30,7 @@ scale = Vector2(13227.881, -6693.899)
 texture = SubResource("CanvasTexture_rahb2")
 
 [node name="Player" parent="." unique_id=1889824967 instance=ExtResource("1_766q3")]
+position = Vector2(-236.79199, -464.9109)
 _spriteFrames = ExtResource("2_aabkw")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=430840102]
@@ -31,7 +45,7 @@ one_way_collision_margin = 30.0
 
 [node name="Sprite2D" type="Sprite2D" parent="Floor" unique_id=2070777323]
 scale = Vector2(-1, -1)
-texture = SubResource("CanvasTexture_rahb2")
+texture = SubResource("CanvasTexture_evsvw")
 
 [node name="LeftWall" type="StaticBody2D" parent="." unique_id=506830127]
 position = Vector2(-5988.1406, -1156.8079)
@@ -61,4 +75,21 @@ one_way_collision_margin = 30.0
 scale = Vector2(-1, -1)
 texture = SubResource("CanvasTexture_rahb2")
 
-[node name="SceneMaster" type="Node2D" parent="." unique_id=315865197]
+[node name="SceneMaster" type="Node2D" parent="." unique_id=315865197 node_paths=PackedStringArray("GradientObject", "Player")]
+script = ExtResource("3_evsvw")
+GradientObject = NodePath("../Gradient")
+Player = NodePath("../Player")
+
+[node name="Gradient" type="Node2D" parent="." unique_id=351699084]
+z_index = 2
+position = Vector2(0, 244)
+scale = Vector2(2, 1)
+
+[node name="Right" type="Sprite2D" parent="Gradient" unique_id=1355368880]
+position = Vector2(128, 0)
+texture = SubResource("GradientTexture1D_aeo36")
+
+[node name="Left" type="Sprite2D" parent="Gradient" unique_id=115632079]
+position = Vector2(-128, 0)
+scale = Vector2(-1, 1)
+texture = SubResource("GradientTexture1D_snd00")

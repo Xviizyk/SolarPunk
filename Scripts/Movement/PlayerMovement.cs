@@ -325,7 +325,7 @@ public partial class PlayerMovement : CharacterBody2D
 		bool leftCanGrab = (Left_body_ray.IsColliding() && !Left_head_ray.IsColliding());
 		bool rightCanGrab = (Right_body_ray.IsColliding() && !Right_head_ray.IsColliding());
 
-		TimedPrint($"Hitbox:\nHeight: {_hitboxShape.Height}, Radius: {_hitboxShape.Radius}\n\nWall System:\n_isGrabbed: {_isGrabbed}, WallState: {_wallState}\n\nRayCast:\nleftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}\n\nOther:\nAnimation: {_lastAnimation}, FPS: {1.0f / _delta}", 0.01f);
+		// TimedPrint($"Hitbox:\nHeight: {_hitboxShape.Height}, Radius: {_hitboxShape.Radius}\n\nWall System:\n_isGrabbed: {_isGrabbed}, WallState: {_wallState}\n\nRayCast:\nleftCanGrab: {leftCanGrab}, rightCamGrab: {rightCanGrab}\n\nOther:\nAnimation: {_lastAnimation}, FPS: {1.0f / _delta}, Position: {GlobalPosition}", 0.01f);
 	
 		_animatedSprite.FlipH = _isLeft;
 

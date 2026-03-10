@@ -73,7 +73,7 @@ pen_tablet/driver.windows="auto"
 
 [network]
 
-limits/debugger/max_queued_messages=128
+limits/debugger/max_queued_messages=4096
 
 [physics]
 

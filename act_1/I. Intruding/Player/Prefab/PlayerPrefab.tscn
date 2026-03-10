@@ -31,9 +31,12 @@ animation = &"Wall_climb_second"
 frame_progress = 0.4003883
 
 [node name="MainCamera" type="Camera2D" parent="." unique_id=2107364585]
+offset = Vector2(0, -100)
+limit_enabled = false
 limit_smoothed = true
-position_smoothing_enabled = true
-rotation_smoothing_enabled = true
+position_smoothing_speed = 10.0
+drag_left_margin = 0.1
+drag_right_margin = 0.1
 
 [node name="CapsuleCollision" type="CollisionShape2D" parent="." unique_id=1408223552]
 shape = SubResource("CapsuleShape2D_gf2k1")
