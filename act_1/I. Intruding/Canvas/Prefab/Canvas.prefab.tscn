@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxrokr8gxuen1"]
 
-[ext_resource type="Script" uid="uid://i3tsv042yy1k" path="res://act_1/I. Intruding/Script/Dialogue.cs" id="1_3pteb"]
+[ext_resource type="Script" uid="uid://cup8f6cf37qxk" path="res://act_1/I. Intruding/Script/DialogueSystem.cs" id="1_3pteb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okacg"]
 skew = Vector2(0.5, 0)

@@ -4,6 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_aabkw"]
 [ext_resource type="Script" uid="uid://bc0l34htuda7h" path="res://act_1/I. Intruding/Script/SceneMasterScript.cs" id="3_evsvw"]
 [ext_resource type="PackedScene" uid="uid://bxrokr8gxuen1" path="res://act_1/I. Intruding/Canvas/Prefab/Canvas.prefab.tscn" id="4_rahb2"]
+[ext_resource type="Script" uid="uid://cup8f6cf37qxk" path="res://act_1/I. Intruding/Script/DialogueSystem.cs" id="5_aeo36"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_rahb2"]
 
@@ -96,3 +97,8 @@ scale = Vector2(-1, 1)
 texture = SubResource("GradientTexture1D_snd00")
 
 [node name="Canvas" parent="." unique_id=978946028 instance=ExtResource("4_rahb2")]
+script = ExtResource("5_aeo36")
+GlitchSpeed = 0.03
+TicksPerChar = 3
+GlitchChars = "!@#$%&*<>?[]{}~ABCDEFGHIJKLMNOPQRSTUVWXYZ€‚ƒ„…†‡ˆ‰ŠŒ‹•–—˜™š›œžŸ¡¢Ž"
+clr1 = Color(0, 0, 0, 0)
