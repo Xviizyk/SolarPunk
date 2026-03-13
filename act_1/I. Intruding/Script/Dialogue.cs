@@ -1,107 +1,88 @@
 using Godot;
 using System;
+using System.Text;
+using System.Threading.Tasks;
 
-public partial class Dialogue : Node2D
+public partial class DialogueSystem : CanvasLayer
 {
-    private bool _allowDash = false;
-	private bool _allowMove = false;
-	private bool _allowSprint = false;
-	private bool _allowJump = false;
-	private bool _allowSit = false;
-	private bool _allowGrab = false;
+    [Export] public float GlitchSpeed = 0.03f;
+    [Export] public int TicksPerChar = 3;
+    [Export] public string GlitchChars = "!@#$%&*<>?[]{}~ABCDEFGHIJKLMNOPQRSTUVWXYZ€‚ƒ„…†‡ˆ‰ŠŒ‹•–—˜™š›œžŸ¡¢Ž";
 
-    [Export] public string GlitchTextAnimationChars = "!?№%@$#*&^+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    [Export] public CharacterBody2D Player;
-    [Export] public float DialogueWindowTextTime;
-    [Export] public float DialogueWindowHeaderTimeLate;
+    private Control _dialogBox;
+    private Label _nameLabel;
+    private Label _textLabel;
 
-    private PlayerMovement MovementScript;
+    private string _targetText = "";
 
-    public override void _PhysicsProcess()
+    private bool _isTyping = false;
+    private bool _skip = false;
+
+    public override void _Ready()
     {
-        
+        _dialogBox = GetNode<Control>("DialogBox");
+        _nameLabel = GetNode<Label>("DialogBox/NameBackground/NameText");
+        _textLabel = GetNode<Label>("DialogBox/TextBackground/DialogText");
+
+        float screenWidth = GetViewport().GetVisibleRect().Size.X;
+
+        _dialogBox.Position = new Vector2(-screenWidth, _dialogBox.Position.Y);
     }
 
-    private void DialogueStart(string Text, string Header)
+    public override void _Input(InputEvent @event)
     {
-        Player.InputLock = true;
+        if (@event.IsActionPressed("ui_accept") && _isTyping)
+            _skip = true;
     }
 
-    private void DialogueEnd()
+    public async void StartDialog(string charName, string message)
     {
-        Player.InputLock = false;
+        _nameLabel.Text = charName;
+        _targetText = message;
+        _textLabel.Text = "";
+        _isTyping = true;
+        _skip = false;
+
+        Tween tween = CreateTween();
+        tween.TweenProperty(_dialogBox, "position:x", 0, 0.5f).SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.Out);
+        await ToSignal(tween, "finished");
+        await RunGlitchEffect();
+    }
+
+    private async Task RunGlitchEffect()
+    {
+        StringBuilder displayedText = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < _targetText.Length; i++)
+        {
+            if (_skip)
+            {
+                _textLabel.Text = _targetText;
+                break;
+            }
+
+            for (int tick = 0; tick < TicksPerChar; tick++)
+            {
+                char randomChar = GlitchChars[random.Next(GlitchChars.Length)];
+                _textLabel.Text = displayedText.ToString() + randomChar;
+                await Task.Delay(TimeSpan.FromSeconds(GlitchSpeed));
+
+                if (_skip)
+                    break;
+            }
+
+            displayedText.Append(_targetText[i]);
+            _textLabel.Text = displayedText.ToString();
+        }
+
+        _isTyping = false;
+    }
+
+    public void CloseDialog()
+    {
+        float screenWidth = GetViewport().GetVisibleRect().Size.X;
+        Tween tween = CreateTween();
+        tween.TweenProperty(_dialogBox, "position:x", screenWidth, 0.5f).SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.In);
     }
 }
-
-
-// using Godot;
-// using System;
-// using System.Threading.Tasks;
-
-// public partial class Dialogue : Control
-// {
-//     [Export] public PlayerMovement Player;
-//     [Export] public RichTextLabel ContentLabel;
-//     [Export] public Label HeaderLabel;
-//     [Export] public Panel Background;
-
-//     private string _targetText = "";
-//     private bool _isTyping = false;
-//     private readonly string _chars = "!?№%@$#*&^+-0123456789"; // Символы для "глюка"
-//     private Random _rnd = new Random();
-
-//     public override void _Ready()
-//     {
-//         // Скрываем всё в начале
-//         Background.Modulate = new Color(1, 1, 1, 0);
-//         HeaderLabel.Modulate = new Color(1, 1, 1, 0);
-//         ContentLabel.Text = "";
-//     }
-
-//     public async void ShowDialogue(string text, string author)
-//     {
-//         if (_isTyping) return;
-//         _isTyping = true;
-
-//         // Блокируем игрока (используем твой InputLock)
-//         if (Player != null) Player.InputLock = true;
-
-//         // 1. Анимация появления фона (Fade In)
-//         var tween = CreateTween();
-//         tween.TweenProperty(Background, "modulate:a", 1.0f, 0.3f);
-//         await ToSignal(tween, "finished");
-
-//         // 2. Анимация появления автора (Вылет слева)
-//         HeaderLabel.Text = author;
-//         HeaderLabel.Position = new Vector2(-100, HeaderLabel.Position.Y); // Стартуем левее
-//         var headerTween = CreateTween().SetParallel(true);
-//         headerTween.TweenProperty(HeaderLabel, "modulate:a", 1.0f, 0.2f);
-//         headerTween.TweenProperty(HeaderLabel, "position:x", 20f, 0.4f).SetTrans(Tween.TransitionType.Back);
-//         await ToSignal(headerTween, "finished");
-
-//         // 3. Эффект расшифровки текста
-//         await RevealText(text);
-
-//         _isTyping = false;
-//     }
-
-//     private async Task RevealText(string finalTarget)
-//     {
-//         ContentLabel.Text = "";
-//         string currentDisplay = "";
-
-//         for (int i = 0; i < finalTarget.Length; i++)
-//         {
-//             // Эффект "перебора" символа перед тем как зафиксировать нужную букву
-//             for (int j = 0; j < 3; j++) // 3 итерации шума на одну букву
-//             {
-//                 char randomChar = _chars[_rnd.Next(_chars.Length)];
-//                 ContentLabel.Text = currentDisplay + randomChar;
-//                 await Task.Delay(20); // Задержка "глюка"
-//             }
-
-//             currentDisplay += finalTarget[i];
-//             ContentLabel.Text = currentDisplay;
-//         }
-//     }
-// }
