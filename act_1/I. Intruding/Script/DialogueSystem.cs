@@ -12,6 +12,9 @@ public partial class DialogueSystem : CanvasLayer
 	private Control _dialogBox;
 	private Label _nameLabel;
 	private Label _textLabel;
+	private StyleBoxFlat
+
+	[Export] public Color clr1;
 
 	private string _targetText = "";
 
@@ -35,13 +38,16 @@ public partial class DialogueSystem : CanvasLayer
 			_skip = true;
 	}
 
-	public async void StartDialog(string charName, string message)
+	public async void StartDialog(string charName, string message, Color color)
 	{
 		_nameLabel.Text = charName;
 		_targetText = message;
 		_textLabel.Text = "";
 		_isTyping = true;
 		_skip = false;
+
+		float size_X_name = _nameLabel.size.x;
+		float size_X_text = _textLabel.size.x;
 
 		Tween tween = CreateTween();
 		tween.TweenProperty(_dialogBox, "position:x", 0, 0.5f).SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.Out);
