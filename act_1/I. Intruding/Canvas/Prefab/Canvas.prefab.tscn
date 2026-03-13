@@ -1,3 +1,41 @@
 [gd_scene format=3 uid="uid://bxrokr8gxuen1"]
 
-[node name="Canvas" type="Node2D" unique_id=978946028]
+[node name="DialogueCanvas" type="CanvasLayer" unique_id=403346747]
+
+[node name="DialogBox" type="Control" parent="." unique_id=356619406]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NameBackground" type="Panel" parent="DialogBox" unique_id=1959692457]
+layout_mode = 0
+offset_left = -88.36
+offset_top = -417.11743
+offset_right = -48.36
+offset_bottom = -377.11743
+
+[node name="NameText" type="Panel" parent="DialogBox/NameBackground" unique_id=1882803868]
+layout_mode = 0
+offset_left = 9.892231
+offset_top = 24.640644
+offset_right = 49.89223
+offset_bottom = 64.64064
+
+[node name="TextBackground" type="Panel" parent="DialogBox" unique_id=1876772848]
+layout_mode = 0
+offset_left = -94.52176
+offset_top = -314.95023
+offset_right = -54.52176
+offset_bottom = -274.95023
+
+[node name="DialogText" type="Panel" parent="DialogBox/TextBackground" unique_id=1749595483]
+layout_mode = 0
+offset_left = 61.87141
+offset_top = 19.784458
+offset_right = 101.871414
+offset_bottom = 59.78446
