@@ -1,52 +1,105 @@
 [gd_scene format=3 uid="uid://bxrokr8gxuen1"]
 
 [ext_resource type="Script" uid="uid://cup8f6cf37qxk" path="res://act_1/I. Intruding/Script/DialogueSystem.cs" id="1_3pteb"]
+[ext_resource type="FontFile" uid="uid://cgydsg8xvqdtm" path="res://Fonts/Taminaru-Regular.otf" id="2_okacg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okacg"]
+bg_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
 skew = Vector2(0.5, 0)
+border_width_left = 500
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_uadkd"]
+font = ExtResource("2_okacg")
+font_size = 24
+outline_size = 27
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uadkd"]
-border_width_left = 100
-border_color = Color(0.7030437, 0.8013551, 1, 1)
+bg_color = Color(0.25565878, 0.2556588, 0.25565875, 1)
+skew = Vector2(0.5, 0)
+border_width_left = 200
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_0ix3u"]
+font = ExtResource("2_okacg")
+font_size = 32
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_okacg"]
 
 [node name="DialogueCanvas" type="CanvasLayer" unique_id=403346747]
 script = ExtResource("1_3pteb")
 
 [node name="DialogBox" type="Control" parent="." unique_id=356619406]
+visible = false
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = -648.0
+offset_right = -576.0
+offset_bottom = -648.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="NameBackground" type="Panel" parent="DialogBox" unique_id=1959692457]
+[node name="TextBackground" type="Panel" parent="DialogBox" unique_id=1959692457]
 layout_mode = 0
-offset_left = -562.2902
-offset_top = -265.16254
-offset_right = -213.237
-offset_bottom = -167.0459
+offset_right = 750.0
+offset_bottom = 200.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_okacg")
 
-[node name="NameText" type="Panel" parent="DialogBox/NameBackground" unique_id=1882803868]
+[node name="DialogText" type="Label" parent="DialogBox/TextBackground" unique_id=1752597580]
 layout_mode = 0
-offset_left = 53.721024
-offset_top = 31.301746
-offset_right = 93.72102
-offset_bottom = 71.30174
+offset_left = 66.76036
+offset_top = 18.26241
+offset_right = 687.92566
+offset_bottom = 177.62724
+text = "Hahaha! You are very
+smart. But...
+You must die!
+are you seriously? :>"
+label_settings = SubResource("LabelSettings_uadkd")
 
-[node name="TextBackground" type="Panel" parent="DialogBox" unique_id=1876772848]
+[node name="NameBackground" type="Panel" parent="DialogBox" unique_id=1876772848]
 layout_mode = 0
-offset_right = 250.0
-offset_bottom = 10.0
+offset_right = 300.0
+offset_bottom = 50.0
 tooltip_auto_translate_mode = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_uadkd")
 
-[node name="DialogText" type="Panel" parent="DialogBox/TextBackground" unique_id=1749595483]
+[node name="NameText" type="Label" parent="DialogBox/NameBackground" unique_id=1232721981]
 layout_mode = 0
-offset_left = 351.3322
-offset_top = -300.67218
-offset_right = 391.3322
-offset_bottom = -260.67218
+offset_left = 15.287964
+offset_top = 6.0642395
+offset_right = 283.93744
+offset_bottom = 54.06424
+text = "Xviizyk"
+label_settings = SubResource("LabelSettings_0ix3u")
+
+[node name="UI" type="Control" parent="." unique_id=807038932]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = -576.0
+offset_bottom = -324.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 8
+
+[node name="Panel" type="Panel" parent="UI" unique_id=1065141312]
+layout_mode = 0
+offset_left = 169.5484
+offset_top = 520.29724
+offset_right = 372.8507
+offset_bottom = 586.12115
+theme_override_styles/panel = SubResource("StyleBoxTexture_okacg")
