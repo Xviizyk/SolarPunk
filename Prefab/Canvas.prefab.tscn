@@ -7,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://c0j2px1v5euma" path="res://Sprites/Canvas/Dialogue/Message/Text.png" id="5_y0vig"]
 [ext_resource type="FontFile" uid="uid://8a01gpctwai2" path="res://Fonts/VCROSDMonoNova.ttf" id="6_x64ac"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_x64ac"]
+font = ExtResource("6_x64ac")
+font_size = 14
+
 [sub_resource type="LabelSettings" id="LabelSettings_ldbn8"]
 font = ExtResource("6_x64ac")
 font_size = 14
@@ -109,10 +113,17 @@ patch_margin_top = 16
 patch_margin_right = 16
 metadata/_edit_use_anchors_ = true
 
-[node name="Header_Text" type="RichTextLabel" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=704164856]
-layout_mode = 0
-offset_right = 130.09845
-offset_bottom = 40.0
+[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=614104436]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0000001
+anchor_bottom = 1.0005001
+offset_right = -3.0517578e-05
+offset_bottom = -0.0080013275
+text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+label_settings = SubResource("LabelSettings_x64ac")
+horizontal_alignment = 1
+vertical_alignment = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="PortraitContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=2094044386]
@@ -171,7 +182,7 @@ metadata/_edit_use_anchors_ = true
 [node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1192441240]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.004549123
+anchor_left = 0.004191456
 anchor_top = 0.008598655
 anchor_right = 0.99980545
 anchor_bottom = 1.0004824
@@ -182,6 +193,7 @@ offset_bottom = -0.0077056885
 text = "WWWWWWWWWWW"
 label_settings = SubResource("LabelSettings_ldbn8")
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
