@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cggw6yflwb3g0"
-path="res://.godot/imported/dash_2.png-bd4bf65efb3f250142ed7a64bb6be875.ctex"
+path="res://.godot/imported/dash_2.png-4b883e9ff9e94e9ac960c3c9770a40db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://act_1/I. Intruding/Player/Sprite/Dash/dash_2.png"
-dest_files=["res://.godot/imported/dash_2.png-bd4bf65efb3f250142ed7a64bb6be875.ctex"]
+source_file="res://Sprites/Act_1/Dash/dash_2.png"
+dest_files=["res://.godot/imported/dash_2.png-4b883e9ff9e94e9ac960c3c9770a40db.ctex"]
 
 [params]
 

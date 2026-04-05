@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bfoguvswuih0r"
-path="res://.godot/imported/run_06.png-20b6760818e948bb3ff7395b4f5e3a1d.ctex"
+path="res://.godot/imported/run_06.png-754e419b05e608fadd050618060d94f7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://act_1/I. Intruding/Player/Sprite/Run/run_06.png"
-dest_files=["res://.godot/imported/run_06.png-20b6760818e948bb3ff7395b4f5e3a1d.ctex"]
+source_file="res://Sprites/Act_1/Run/run_06.png"
+dest_files=["res://.godot/imported/run_06.png-754e419b05e608fadd050618060d94f7.ctex"]
 
 [params]
 

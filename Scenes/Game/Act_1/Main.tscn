@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://b030a73tjm55x"]
 
-[ext_resource type="PackedScene" uid="uid://bmxv58g215up7" path="res://act_1/I. Intruding/Player/Prefab/PlayerPrefab.tscn" id="1_766q3"]
-[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_aabkw"]
-[ext_resource type="Script" uid="uid://bc0l34htuda7h" path="res://act_1/I. Intruding/Script/SceneMasterScript.cs" id="3_evsvw"]
+[ext_resource type="PackedScene" uid="uid://bmxv58g215up7" path="res://Prefab/PlayerPrefab.tscn" id="1_766q3"]
+[ext_resource type="Script" uid="uid://p5s55kofeey5" path="res://Scripts/Gameplay/Act_1/SceneMasterScript.cs" id="2_4tix4"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_rahb2"]
 
@@ -31,7 +30,6 @@ texture = SubResource("CanvasTexture_rahb2")
 
 [node name="Player" parent="." unique_id=1889824967 instance=ExtResource("1_766q3")]
 position = Vector2(-236.79199, -464.9109)
-_spriteFrames = ExtResource("2_aabkw")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=430840102]
 position = Vector2(3.1296387, 1216.1018)
@@ -76,7 +74,7 @@ scale = Vector2(-1, -1)
 texture = SubResource("CanvasTexture_rahb2")
 
 [node name="SceneMaster" type="Node2D" parent="." unique_id=315865197 node_paths=PackedStringArray("GradientObject", "Player")]
-script = ExtResource("3_evsvw")
+script = ExtResource("2_4tix4")
 GradientObject = NodePath("../Gradient")
 Player = NodePath("../Player")
 

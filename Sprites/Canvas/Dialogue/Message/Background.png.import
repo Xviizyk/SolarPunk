@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpc72bswin8xs"
-path="res://.godot/imported/wall_climb_09.png-82c6c75fe4f9ea45fd401e73a9b06f6e.ctex"
+uid="uid://d3c4mopqwgogq"
+path="res://.godot/imported/Background.png-1f45d469ad99ce786c6601b5c126d260.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Act_1/Wall_Climb/wall_climb_09.png"
-dest_files=["res://.godot/imported/wall_climb_09.png-82c6c75fe4f9ea45fd401e73a9b06f6e.ctex"]
+source_file="res://Sprites/Canvas/Dialogue/Message/Background.png"
+dest_files=["res://.godot/imported/Background.png-1f45d469ad99ce786c6601b5c126d260.ctex"]
 
 [params]
 

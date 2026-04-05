@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cc8lgsonfcf5m"
-path="res://.godot/imported/wall_climb_14.png-dc9befbb8bf2da53203cbc1349cda696.ctex"
+path="res://.godot/imported/wall_climb_14.png-5c42f08201ba0464b83d4dbf39d0db48.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://act_1/I. Intruding/Player/Sprite/Wall_Climb/wall_climb_14.png"
-dest_files=["res://.godot/imported/wall_climb_14.png-dc9befbb8bf2da53203cbc1349cda696.ctex"]
+source_file="res://Sprites/Act_1/Wall_Climb/wall_climb_14.png"
+dest_files=["res://.godot/imported/wall_climb_14.png-5c42f08201ba0464b83d4dbf39d0db48.ctex"]
 
 [params]
 

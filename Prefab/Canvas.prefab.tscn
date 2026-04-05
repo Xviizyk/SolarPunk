@@ -1,39 +1,21 @@
 [gd_scene format=3 uid="uid://bxrokr8gxuen1"]
 
-[ext_resource type="Script" uid="uid://cup8f6cf37qxk" path="res://act_1/I. Intruding/Script/DialogueSystem.cs" id="1_3pteb"]
-[ext_resource type="FontFile" uid="uid://cgydsg8xvqdtm" path="res://Fonts/Taminaru-Regular.otf" id="2_okacg"]
+[ext_resource type="Texture2D" uid="uid://tcf6yxp4i5y6" path="res://Sprites/Canvas/Dialogue/Avatar/Background.png" id="1_5quej"]
+[ext_resource type="Texture2D" uid="uid://dhhbbihmst3xr" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Name.png" id="1_xxpt0"]
+[ext_resource type="Texture2D" uid="uid://bn6nt0nyia2iy" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Background.png" id="2_x64ac"]
+[ext_resource type="Texture2D" uid="uid://d3c4mopqwgogq" path="res://Sprites/Canvas/Dialogue/Message/Background.png" id="4_ldbn8"]
+[ext_resource type="Texture2D" uid="uid://c0j2px1v5euma" path="res://Sprites/Canvas/Dialogue/Message/Text.png" id="5_y0vig"]
+[ext_resource type="FontFile" uid="uid://8a01gpctwai2" path="res://Fonts/VCROSDMonoNova.ttf" id="6_x64ac"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okacg"]
-bg_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
-skew = Vector2(0.5, 0)
-border_width_left = 500
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-
-[sub_resource type="LabelSettings" id="LabelSettings_uadkd"]
-font = ExtResource("2_okacg")
-font_size = 24
-outline_size = 27
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uadkd"]
-bg_color = Color(0.25565878, 0.2556588, 0.25565875, 1)
-skew = Vector2(0.5, 0)
-border_width_left = 200
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-
-[sub_resource type="LabelSettings" id="LabelSettings_0ix3u"]
-font = ExtResource("2_okacg")
-font_size = 32
+[sub_resource type="LabelSettings" id="LabelSettings_ldbn8"]
+font = ExtResource("6_x64ac")
+font_size = 14
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_okacg"]
 
 [node name="DialogueCanvas" type="CanvasLayer" unique_id=403346747]
-script = ExtResource("1_3pteb")
 
-[node name="DialogBox" type="Control" parent="." unique_id=356619406]
-visible = false
+[node name="DialogueBox" type="Control" parent="." unique_id=1811059112]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -41,47 +23,170 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -576.0
-offset_top = -648.0
-offset_right = -576.0
-offset_bottom = -648.0
+offset_right = 576.0
 grow_horizontal = 2
 grow_vertical = 0
+size_flags_vertical = 8
 
-[node name="TextBackground" type="Panel" parent="DialogBox" unique_id=1959692457]
-layout_mode = 0
-offset_right = 750.0
-offset_bottom = 200.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_okacg")
+[node name="HBoxContainer" type="Node2D" parent="DialogueBox" unique_id=736880661]
 
-[node name="DialogText" type="Label" parent="DialogBox/TextBackground" unique_id=1752597580]
-layout_mode = 0
-offset_left = 66.76036
-offset_top = 18.26241
-offset_right = 687.92566
-offset_bottom = 177.62724
-text = "Hahaha! You are very
-smart. But...
-You must die!
-are you seriously? :>"
-label_settings = SubResource("LabelSettings_uadkd")
+[node name="TextContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=560956304]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+metadata/_edit_use_anchors_ = true
 
-[node name="NameBackground" type="Panel" parent="DialogBox" unique_id=1876772848]
+[node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer" unique_id=498443260]
 layout_mode = 0
-offset_right = 300.0
-offset_bottom = 50.0
-tooltip_auto_translate_mode = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_uadkd")
+offset_left = 8.0
+offset_top = -139.43256
+offset_right = 456.0
+offset_bottom = -6.6311035
+texture = ExtResource("4_ldbn8")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+metadata/_edit_use_anchors_ = true
 
-[node name="NameText" type="Label" parent="DialogBox/NameBackground" unique_id=1232721981]
+[node name="Background_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=585271505]
 layout_mode = 0
-offset_left = 15.287964
-offset_top = 6.0642395
-offset_right = 283.93744
-offset_bottom = 54.06424
-text = "Xviizyk"
-label_settings = SubResource("LabelSettings_0ix3u")
+offset_left = 160.0
+offset_top = 11.432556
+offset_right = 435.44733
+offset_bottom = 119.04974
+texture = ExtResource("5_y0vig")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Message" type="RichTextLabel" parent="DialogueBox/HBoxContainer/TextContainer/Background/Background_Text" unique_id=863874331]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 265.94598
+offset_bottom = 98.26465
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Message" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=1536583996]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -224.0
+offset_top = -23.999989
+offset_right = 74.66666
+offset_bottom = -7.9999886
+grow_horizontal = 2
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_x64ac")
+region_rect = Rect2(0, 0, 48, 16)
+patch_margin_left = 16
+patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message" unique_id=1514319193]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.66667
+offset_top = -5.711629
+offset_right = 219.66417
+offset_bottom = 10.288372
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_xxpt0")
+region_rect = Rect2(0, 0, 48, 16)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Text" type="RichTextLabel" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=704164856]
+layout_mode = 0
+offset_right = 130.09845
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="PortraitContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=2094044386]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1.0
+offset_bottom = 1.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer" unique_id=1880170299]
+layout_mode = 0
+offset_left = 16.0
+offset_top = -184.0
+offset_right = 160.0
+offset_bottom = -16.0
+texture = ExtResource("1_5quej")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Character" type="TextureRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=265032561]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Avatar" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=1605499566]
+layout_mode = 0
+offset_top = -24.0
+offset_right = 96.00001
+offset_bottom = -8.0
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_x64ac")
+region_rect = Rect2(0, 0, 48, 16)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar" unique_id=2068109948]
+layout_mode = 0
+offset_left = 20.56237
+offset_top = 2.679662
+offset_right = 115.05874
+offset_bottom = 18.679663
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("1_xxpt0")
+region_rect = Rect2(0, 0, 48, 16)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
+
+[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1192441240]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.004549123
+anchor_top = 0.008598655
+anchor_right = 0.99980545
+anchor_bottom = 1.0004824
+offset_left = 0.033802032
+offset_top = -0.005973816
+offset_right = 0.01838684
+offset_bottom = -0.0077056885
+text = "WWWWWWWWWWW"
+label_settings = SubResource("LabelSettings_ldbn8")
+horizontal_alignment = 1
+autowrap_mode = 3
+metadata/_edit_use_anchors_ = true
 
 [node name="UI" type="Control" parent="." unique_id=807038932]
+visible = false
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -98,8 +203,8 @@ size_flags_vertical = 8
 
 [node name="Panel" type="Panel" parent="UI" unique_id=1065141312]
 layout_mode = 0
-offset_left = 169.5484
-offset_top = 520.29724
-offset_right = 372.8507
-offset_bottom = 586.12115
+offset_left = 144.0
+offset_top = 528.0
+offset_right = 347.3023
+offset_bottom = 593.8239
 theme_override_styles/panel = SubResource("StyleBoxTexture_okacg")

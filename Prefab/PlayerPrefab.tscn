@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bmxv58g215up7"]
 
 [ext_resource type="Script" uid="uid://cg4kh66d73ocw" path="res://Scripts/Movement/PlayerMovement.cs" id="1_1vlsb"]
-[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://act_1/I. Intruding/Player/SpriteFrames/act1.Intruding.tres" id="2_5p7jt"]
+[ext_resource type="SpriteFrames" uid="uid://dj7r8y3ebtabi" path="res://Prefab/Player_Animation_Act_1.tres" id="2_5p7jt"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gf2k1"]
 radius = 0.005
@@ -16,9 +16,6 @@ Right_body_ray = NodePath("Right_body_ray")
 Right_head_ray = NodePath("Right_head_ray")
 _animatedSprite = NodePath("BodySprite/AnimatedSprite2D")
 _hitbox = NodePath("CapsuleCollision")
-WallClimbHitboxPosition = Vector2(15, 33)
-WallClimbGlobalPositionMove = 25.0
-MaxJumpCount = 1876
 
 [node name="BodySprite" type="Node2D" parent="." unique_id=820344618]
 

@@ -24,6 +24,10 @@ project/assembly_name="SolarPunk"
 
 movie_writer/fps=120
 
+[gui]
+
+theme/custom_font="uid://8a01gpctwai2"
+
 [input]
 
 Right={
@@ -82,5 +86,6 @@ limits/debugger/max_queued_messages=4096
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"

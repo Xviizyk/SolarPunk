@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpc72bswin8xs"
-path="res://.godot/imported/wall_climb_09.png-82c6c75fe4f9ea45fd401e73a9b06f6e.ctex"
+uid="uid://dhhbbihmst3xr"
+path="res://.godot/imported/Header_Name.png-72b51d0f1ffb3627cd37ee641d59dc2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Act_1/Wall_Climb/wall_climb_09.png"
-dest_files=["res://.godot/imported/wall_climb_09.png-82c6c75fe4f9ea45fd401e73a9b06f6e.ctex"]
+source_file="res://Sprites/Canvas/Dialogue/Avatar/Header_Name.png"
+dest_files=["res://.godot/imported/Header_Name.png-72b51d0f1ffb3627cd37ee641d59dc2f.ctex"]
 
 [params]
 
