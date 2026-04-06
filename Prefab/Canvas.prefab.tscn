@@ -27,7 +27,6 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_right = 1152.0
-grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
 
@@ -38,6 +37,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer" unique_id=498443260]
 layout_mode = 1
@@ -80,9 +80,9 @@ offset_left = 5.2009583
 offset_top = 5.2009277
 offset_right = -6.9868164
 offset_bottom = -5.247246
-text = "This is a test message. If you see it... IDK... Okey... Just... Let's speak about something. I"
+text = "TETO"
 label_settings = SubResource("LabelSettings_y0vig")
-autowrap_mode = 2
+autowrap_mode = 3
 
 [node name="Header_Message" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=1536583996]
 layout_mode = 1
@@ -127,7 +127,7 @@ anchor_bottom = 1.0005001
 offset_top = -3.0517578e-05
 offset_right = -3.0517578e-05
 offset_bottom = -0.0080013275
-text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+text = "TETO"
 label_settings = SubResource("LabelSettings_x64ac")
 horizontal_alignment = 1
 vertical_alignment = 3
@@ -139,6 +139,7 @@ offset_right = 1.0
 offset_bottom = 1.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer" unique_id=1880170299]
 layout_mode = 1
@@ -156,6 +157,7 @@ patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
+metadata/_edit_use_anchors_ = true
 
 [node name="Character" type="TextureRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=265032561]
 layout_mode = 1
@@ -170,20 +172,22 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(4, 4)
 texture = ExtResource("7_ldbn8")
+metadata/_edit_use_anchors_ = true
 
 [node name="Header_Avatar" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=1605499566]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -26.125626
+offset_top = -23.446304
 offset_right = -47.999992
-offset_bottom = -176.70854
+offset_bottom = -174.02922
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_x64ac")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
 patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
 
 [node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar" unique_id=2068109948]
 layout_mode = 1
@@ -199,6 +203,7 @@ texture = ExtResource("1_xxpt0")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
 patch_margin_right = 16
+metadata/_edit_use_anchors_ = true
 
 [node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1192441240]
 layout_mode = 1
@@ -211,11 +216,12 @@ offset_left = -0.04260248
 offset_top = -0.005973816
 offset_right = 0.01838684
 offset_bottom = 1.335144e-05
-text = "WWWWWWWWWW"
+text = "TETO"
 label_settings = SubResource("LabelSettings_ldbn8")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+metadata/_edit_use_anchors_ = true
 
 [node name="UI" type="Control" parent="." unique_id=807038932]
 visible = false
