@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bmxv58g215up7" path="res://Prefab/PlayerPrefab.tscn" id="1_766q3"]
 [ext_resource type="Script" uid="uid://p5s55kofeey5" path="res://Scripts/Gameplay/Act_1/SceneMasterScript.cs" id="2_4tix4"]
+[ext_resource type="PackedScene" uid="uid://bxrokr8gxuen1" path="res://Prefab/Canvas.prefab.tscn" id="3_dsklo"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_rahb2"]
 
@@ -21,6 +22,7 @@ gradient = SubResource("Gradient_rahb2")
 gradient = SubResource("Gradient_6vni2")
 
 [node name="Main" type="Node2D" unique_id=1295066412]
+position = Vector2(785.2229, 52.348633)
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1680925906]
 position = Vector2(-452.80225, -1156.8077)
@@ -29,7 +31,7 @@ scale = Vector2(13227.881, -6693.899)
 texture = SubResource("CanvasTexture_rahb2")
 
 [node name="Player" parent="." unique_id=1889824967 instance=ExtResource("1_766q3")]
-position = Vector2(-236.79199, -464.9109)
+position = Vector2(-771.74756, 153.4881)
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=430840102]
 position = Vector2(3.1296387, 1216.1018)
@@ -91,3 +93,10 @@ texture = SubResource("GradientTexture1D_aeo36")
 position = Vector2(-128, 0)
 scale = Vector2(-1, 1)
 texture = SubResource("GradientTexture1D_snd00")
+
+[node name="DialogueCanvas" parent="." unique_id=403346747 instance=ExtResource("3_dsklo")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1855680643]
+position = Vector2(-444.167, -1078.6909)
+enabled = false
+zoom = Vector2(0.1, 0.1)

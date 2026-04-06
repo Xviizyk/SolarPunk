@@ -6,14 +6,16 @@
 [ext_resource type="Texture2D" uid="uid://d3c4mopqwgogq" path="res://Sprites/Canvas/Dialogue/Message/Background.png" id="4_ldbn8"]
 [ext_resource type="Texture2D" uid="uid://c0j2px1v5euma" path="res://Sprites/Canvas/Dialogue/Message/Text.png" id="5_y0vig"]
 [ext_resource type="FontFile" uid="uid://8a01gpctwai2" path="res://Fonts/VCROSDMonoNova.ttf" id="6_x64ac"]
+[ext_resource type="Texture2D" uid="uid://dkli6n3l114gl" path="res://Sprites/Canvas/Avatar/Unknown.png" id="7_ldbn8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y0vig"]
+font = ExtResource("6_x64ac")
 
 [sub_resource type="LabelSettings" id="LabelSettings_x64ac"]
 font = ExtResource("6_x64ac")
-font_size = 14
 
 [sub_resource type="LabelSettings" id="LabelSettings_ldbn8"]
 font = ExtResource("6_x64ac")
-font_size = 14
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_okacg"]
 
@@ -21,13 +23,10 @@ font_size = 14
 
 [node name="DialogueBox" type="Control" parent="." unique_id=1811059112]
 layout_mode = 3
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -576.0
-offset_right = 576.0
+offset_right = 1152.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
@@ -39,163 +38,184 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
-metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer" unique_id=498443260]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -163.43301
+anchor_right = 580.0
+anchor_bottom = -6.6320004
 offset_left = 8.0
-offset_top = -139.43256
-offset_right = 456.0
-offset_bottom = -6.6311035
+offset_top = 7.433014
+offset_right = 6.1035156e-05
+offset_bottom = 0.00043916702
 texture = ExtResource("4_ldbn8")
 patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
-metadata/_edit_use_anchors_ = true
 
 [node name="Background_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=585271505]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.18100001
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 160.0
-offset_top = 11.432556
-offset_right = 435.44733
-offset_bottom = 119.04974
+offset_top = 35.469536
+offset_right = -12.368408
+offset_bottom = -13.751251
 texture = ExtResource("5_y0vig")
 patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
-metadata/_edit_use_anchors_ = true
 
-[node name="Message" type="RichTextLabel" parent="DialogueBox/HBoxContainer/TextContainer/Background/Background_Text" unique_id=863874331]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 265.94598
-offset_bottom = 98.26465
-metadata/_edit_use_anchors_ = true
+[node name="Message" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Background_Text" unique_id=1037538869]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.2009583
+offset_top = 5.2009277
+offset_right = -6.9868164
+offset_bottom = -5.247246
+text = "This is a test message. If you see it... IDK... Okey... Just... Let's speak about something. I"
+label_settings = SubResource("LabelSettings_y0vig")
+autowrap_mode = 2
 
 [node name="Header_Message" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=1536583996]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = -1
+anchor_left = 0.3916084
+anchor_right = 0.5361306
 offset_left = -224.0
-offset_top = -23.999989
-offset_right = 74.66666
-offset_bottom = -7.9999886
+offset_top = -30.688923
+offset_right = 74.666626
+offset_bottom = -10.229664
 grow_horizontal = 2
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_x64ac")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
 patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
 
 [node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message" unique_id=1514319193]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.3916083
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.7148173
 anchor_bottom = 0.5
 offset_left = -42.66667
-offset_top = -5.711629
-offset_right = 219.66417
-offset_bottom = 10.288372
+offset_top = -7.396175
+offset_right = 219.66455
+offset_bottom = 12.709171
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("1_xxpt0")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
-patch_margin_top = 16
 patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
 
-[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=614104436]
+[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=1346950687]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0000001
 anchor_bottom = 1.0005001
+offset_top = -3.0517578e-05
 offset_right = -3.0517578e-05
 offset_bottom = -0.0080013275
-text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
 label_settings = SubResource("LabelSettings_x64ac")
 horizontal_alignment = 1
 vertical_alignment = 3
-metadata/_edit_use_anchors_ = true
 
 [node name="PortraitContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=2094044386]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1.0
 offset_bottom = 1.0
-metadata/_edit_use_anchors_ = true
+size_flags_horizontal = 4
+size_flags_vertical = 0
 
 [node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer" unique_id=1880170299]
-layout_mode = 0
-offset_left = 16.0
-offset_top = -184.0
-offset_right = 160.0
-offset_bottom = -16.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 8.0
+anchor_top = -6.6320004
+anchor_right = 8.0
+anchor_bottom = -6.6320004
+offset_left = 8.0
+offset_top = -177.368
+offset_right = 152.0
+offset_bottom = -9.368
 texture = ExtResource("1_5quej")
 patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
-metadata/_edit_use_anchors_ = true
 
 [node name="Character" type="TextureRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=265032561]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-metadata/_edit_use_anchors_ = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.212509
+offset_top = 1.561266
+offset_right = -102.78749
+offset_bottom = -126.438736
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+texture = ExtResource("7_ldbn8")
 
 [node name="Header_Avatar" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=1605499566]
-layout_mode = 0
-offset_top = -24.0
-offset_right = 96.00001
-offset_bottom = -8.0
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -26.125626
+offset_right = -47.999992
+offset_bottom = -176.70854
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_x64ac")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
-patch_margin_top = 16
 patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
 
 [node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar" unique_id=2068109948]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 8.0
 offset_left = 20.56237
-offset_top = 2.679662
-offset_right = 115.05874
-offset_bottom = 18.679663
+offset_top = 1.7862294
+offset_right = 22.265884
+offset_bottom = -118.57534
 scale = Vector2(0.65, 0.65)
 texture = ExtResource("1_xxpt0")
 region_rect = Rect2(0, 0, 48, 16)
 patch_margin_left = 16
-patch_margin_top = 16
 patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
 
 [node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1192441240]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.004191456
+anchor_left = 0.0050000004
 anchor_top = 0.008598655
 anchor_right = 0.99980545
-anchor_bottom = 1.0004824
-offset_left = 0.033802032
+anchor_bottom = 1.0
+offset_left = -0.04260248
 offset_top = -0.005973816
 offset_right = 0.01838684
-offset_bottom = -0.0077056885
-text = "WWWWWWWWWWW"
+offset_bottom = 1.335144e-05
+text = "WWWWWWWWWW"
 label_settings = SubResource("LabelSettings_ldbn8")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
-metadata/_edit_use_anchors_ = true
 
 [node name="UI" type="Control" parent="." unique_id=807038932]
 visible = false

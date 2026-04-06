@@ -6,7 +6,7 @@ public partial class SceneMasterScript : Node2D
 
 	[Export] public Node2D GradientObject;
 	[Export] public CharacterBody2D Player;
-	[Export] public float MaxDistanceFromCenter = 4000.0f;
+	[Export] public float MaxDistanceFromCenter = 3500.0f;
 	
 	public override void _PhysicsProcess(double delta)
 	{

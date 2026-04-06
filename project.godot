@@ -16,6 +16,13 @@ config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 run/max_fps=120
 config/icon="res://Sprites/Game/Icon/icon.svg"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [dotnet]
 
 project/assembly_name="SolarPunk"
@@ -88,4 +95,3 @@ limits/debugger/max_queued_messages=4096
 
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="mobile"
