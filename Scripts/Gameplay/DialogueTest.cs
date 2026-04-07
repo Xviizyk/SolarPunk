@@ -1,21 +1,39 @@
 using Godot;
 
-public partial class DialogueController : Node2D
+public partial class DialogueTest : Node2D
 {
-    public void StartTestDialogue()
-    {
-        var controller = GetNode<DialogueController>("DialogueCanvas");
-        var portrait = GD.Load<Texture2D>("res://path_to_avatar.png");
-        
-        controller.SetupDialogue(
-            portrait, 
-            "TETO", 
-            "COMMANDER", 
-            "Внимание! <red>Критическая ошибка</red> в системе. Но <b>TETO</b> теперь работает.", 
-            new Color(0.1f, 0.5f, 0.8f), 
-            2, 
-            "left", 
-            true
-        );
-    }
+	[Export] CanvasLayer canvas;
+	private Dialogue controller;
+
+	public override void _Ready()
+	{
+		controller = canvas.GetNodeOrNull<Dialogue>("Dialogue");
+	}
+	
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("debug_start_dialogue_phrase1")) StartTestDialogue1();
+	}
+	
+	public void StartTestDialogue1()
+	{		
+		if (controller == null)
+		{
+			GD.PrintErr("Критическая ошибка: Скрипт DialogueTest не видит узел Dialogue!");
+			return;
+		}
+		
+		var portrait = GD.Load<Texture2D>("res://Sprites/Canvas/Avatar/Unknown.png");
+		
+		controller.SetupDialogue(
+			portrait, 
+			new Color(0.2f, 0.2f, 0.2f), 
+			"UNKNOWN", 
+			"ADMIN", 
+			"Система: [font_size=12][color=red]Активна[/color]. BBCode [b]работает[/b]![/font_size]", 
+			2, 
+			"left", 
+			true
+		);
+	}
 }

@@ -1,248 +1,211 @@
-[gd_scene format=3 uid="uid://bxrokr8gxuen1"]
+[gd_scene format=3 uid="uid://csic8jy4je1w"]
 
-[ext_resource type="Texture2D" uid="uid://tcf6yxp4i5y6" path="res://Sprites/Canvas/Dialogue/Avatar/Background.png" id="1_5quej"]
-[ext_resource type="Texture2D" uid="uid://dhhbbihmst3xr" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Name.png" id="1_xxpt0"]
-[ext_resource type="Texture2D" uid="uid://bn6nt0nyia2iy" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Background.png" id="2_x64ac"]
-[ext_resource type="Texture2D" uid="uid://d3c4mopqwgogq" path="res://Sprites/Canvas/Dialogue/Message/Background.png" id="4_ldbn8"]
-[ext_resource type="Texture2D" uid="uid://c0j2px1v5euma" path="res://Sprites/Canvas/Dialogue/Message/Text.png" id="5_y0vig"]
-[ext_resource type="FontFile" uid="uid://8a01gpctwai2" path="res://Fonts/VCROSDMonoNova.ttf" id="6_x64ac"]
-[ext_resource type="Texture2D" uid="uid://dkli6n3l114gl" path="res://Sprites/Canvas/Avatar/Unknown.png" id="7_ldbn8"]
+[ext_resource type="Texture2D" uid="uid://tcf6yxp4i5y6" path="res://Sprites/Canvas/Dialogue/Avatar/Background.png" id="1_bg_av"]
+[ext_resource type="Script" uid="uid://2qkuyng2ymb3" path="res://Scripts/Gameplay/Act_1/Dialogue.cs" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://dhhbbihmst3xr" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Name.png" id="3_hdr_name"]
+[ext_resource type="Texture2D" uid="uid://bn6nt0nyia2iy" path="res://Sprites/Canvas/Dialogue/Avatar/Header_Background.png" id="4_hdr_bg"]
+[ext_resource type="Texture2D" uid="uid://d3c4mopqwgogq" path="res://Sprites/Canvas/Dialogue/Message/Background.png" id="5_msg_bg"]
+[ext_resource type="Texture2D" uid="uid://c0j2px1v5euma" path="res://Sprites/Canvas/Dialogue/Message/Text.png" id="6_txt_bg"]
+[ext_resource type="Texture2D" uid="uid://dkli6n3l114gl" path="res://Sprites/Canvas/Avatar/Unknown.png" id="7_unk"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_y0vig"]
-font = ExtResource("6_x64ac")
+[node name="DialogueCanvas" type="CanvasLayer" unique_id=62951691]
 
-[sub_resource type="LabelSettings" id="LabelSettings_x64ac"]
-font = ExtResource("6_x64ac")
-
-[sub_resource type="LabelSettings" id="LabelSettings_ldbn8"]
-font = ExtResource("6_x64ac")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_okacg"]
-
-[node name="DialogueCanvas" type="CanvasLayer" unique_id=403346747]
-
-[node name="DialogueBox" type="Control" parent="." unique_id=1811059112]
+[node name="Dialogue" type="Control" parent="." unique_id=671978270]
 layout_mode = 3
-anchors_preset = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_script")
+
+[node name="DialogueBox" type="Control" parent="Dialogue" unique_id=1899332979]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 1
+anchors_preset = 12
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1152.0
+offset_top = -250.0
+grow_horizontal = 2
 grow_vertical = 0
-size_flags_vertical = 8
 
-[node name="HBoxContainer" type="Node2D" parent="DialogueBox" unique_id=736880661]
-
-[node name="TextContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=560956304]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1.0
-offset_bottom = 1.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer" unique_id=498443260]
+[node name="TextContainer" type="Control" parent="Dialogue/DialogueBox" unique_id=1625133351]
 layout_mode = 1
-anchors_preset = -1
-anchor_top = -163.43301
-anchor_right = 580.0
-anchor_bottom = -6.6320004
-offset_left = 8.0
-offset_top = 7.433014
-offset_right = 6.1035156e-05
-offset_bottom = 0.00043916702
-texture = ExtResource("4_ldbn8")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-
-[node name="Background_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=585271505]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.18100001
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 160.0
-offset_top = 35.469536
-offset_right = -12.368408
-offset_bottom = -13.751251
-texture = ExtResource("5_y0vig")
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-
-[node name="Message" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Background_Text" unique_id=1037538869]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.2009583
-offset_top = 5.2009277
-offset_right = -6.9868164
-offset_bottom = -5.247246
-text = "TETO"
-label_settings = SubResource("LabelSettings_y0vig")
-autowrap_mode = 3
-
-[node name="Header_Message" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background" unique_id=1536583996]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3916084
-anchor_right = 0.5361306
-offset_left = -224.0
-offset_top = -30.688923
-offset_right = 74.666626
-offset_bottom = -10.229664
-grow_horizontal = 2
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_x64ac")
-region_rect = Rect2(0, 0, 48, 16)
-patch_margin_left = 16
-patch_margin_right = 16
-
-[node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message" unique_id=1514319193]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3916083
-anchor_top = 0.5
-anchor_right = 0.7148173
-anchor_bottom = 0.5
-offset_left = -42.66667
-offset_top = -7.396175
-offset_right = 219.66455
-offset_bottom = 12.709171
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -280.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.7, 0.7)
-texture = ExtResource("1_xxpt0")
-region_rect = Rect2(0, 0, 48, 16)
-patch_margin_left = 16
-patch_margin_right = 16
 
-[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/TextContainer/Background/Header_Message/Header_Text" unique_id=1346950687]
+[node name="Background" type="NinePatchRect" parent="Dialogue/DialogueBox/TextContainer" unique_id=252057471]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0000001
-anchor_bottom = 1.0005001
-offset_top = -3.0517578e-05
-offset_right = -3.0517578e-05
-offset_bottom = -0.0080013275
-text = "TETO"
-label_settings = SubResource("LabelSettings_x64ac")
-horizontal_alignment = 1
-vertical_alignment = 3
-
-[node name="PortraitContainer" type="Control" parent="DialogueBox/HBoxContainer" unique_id=2094044386]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1.0
-offset_bottom = 1.0
-size_flags_horizontal = 4
-size_flags_vertical = 0
-metadata/_edit_use_anchors_ = true
-
-[node name="Background" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer" unique_id=1880170299]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 8.0
-anchor_top = -6.6320004
-anchor_right = 8.0
-anchor_bottom = -6.6320004
-offset_left = 8.0
-offset_top = -177.368
-offset_right = 152.0
-offset_bottom = -9.368
-texture = ExtResource("1_5quej")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_right = 270.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_msg_bg")
 patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
-metadata/_edit_use_anchors_ = true
 
-[node name="Character" type="TextureRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=265032561]
+[node name="Header_Message" type="NinePatchRect" parent="Dialogue/DialogueBox/TextContainer/Background" unique_id=2081175726]
+custom_minimum_size = Vector2(200, 20)
 layout_mode = 1
-anchors_preset = -1
+offset_top = -24.0
+offset_right = 1260.0
+texture = ExtResource("4_hdr_bg")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+
+[node name="Header_Text" type="NinePatchRect" parent="Dialogue/DialogueBox/TextContainer/Background/Header_Message" unique_id=81055919]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 9.212509
-offset_top = 1.561266
-offset_right = -102.78749
-offset_bottom = -126.438736
+offset_left = 270.0
+offset_top = 2.0
+offset_right = -15.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(4, 4)
-texture = ExtResource("7_ldbn8")
-metadata/_edit_use_anchors_ = true
-
-[node name="Header_Avatar" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background" unique_id=1605499566]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -23.446304
-offset_right = -47.999992
-offset_bottom = -174.02922
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_x64ac")
-region_rect = Rect2(0, 0, 48, 16)
+texture = ExtResource("3_hdr_name")
 patch_margin_left = 16
 patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
 
-[node name="Header_Text" type="NinePatchRect" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar" unique_id=2068109948]
+[node name="Header_Text" type="RichTextLabel" parent="Dialogue/DialogueBox/TextContainer/Background/Header_Message/Header_Text" unique_id=1490258387]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 8.0
-offset_left = 20.56237
-offset_top = 1.7862294
-offset_right = 22.265884
-offset_bottom = -118.57534
-scale = Vector2(0.65, 0.65)
-texture = ExtResource("1_xxpt0")
-region_rect = Rect2(0, 0, 48, 16)
-patch_margin_left = 16
-patch_margin_right = 16
-metadata/_edit_use_anchors_ = true
-
-[node name="Header_Text" type="Label" parent="DialogueBox/HBoxContainer/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1192441240]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0050000004
-anchor_top = 0.008598655
-anchor_right = 0.99980545
 anchor_bottom = 1.0
-offset_left = -0.04260248
-offset_top = -0.005973816
-offset_right = 0.01838684
-offset_bottom = 1.335144e-05
-text = "TETO"
-label_settings = SubResource("LabelSettings_ldbn8")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-metadata/_edit_use_anchors_ = true
+offset_left = 12.0
+offset_right = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Role[/center]"
 
-[node name="UI" type="Control" parent="." unique_id=807038932]
-visible = false
-layout_mode = 3
-anchors_preset = 8
+[node name="Background_Text" type="NinePatchRect" parent="Dialogue/DialogueBox/TextContainer/Background" unique_id=336486990]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 270.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_txt_bg")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="Message" type="RichTextLabel" parent="Dialogue/DialogueBox/TextContainer/Background/Background_Text" unique_id=241136]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = -13.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "Sample dialogue text..."
+
+[node name="PortraitContainer" type="Control" parent="Dialogue/DialogueBox" unique_id=1975131754]
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1260.0
+offset_top = -20.0
+offset_right = -1009.99994
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Background" type="NinePatchRect" parent="Dialogue/DialogueBox/PortraitContainer" unique_id=1672516816]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bg_av")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="Character" type="TextureRect" parent="Dialogue/DialogueBox/PortraitContainer/Background" unique_id=1405241877]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_unk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Header_Avatar" type="NinePatchRect" parent="Dialogue/DialogueBox/PortraitContainer/Background" unique_id=574430785]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -324.0
-offset_right = -576.0
-offset_bottom = -324.0
+offset_left = -125.0
+offset_top = -20.0
+offset_right = 124.99997
+grow_horizontal = 2
+texture = ExtResource("4_hdr_bg")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+
+[node name="Header_Text" type="NinePatchRect" parent="Dialogue/DialogueBox/PortraitContainer/Background/Header_Avatar" unique_id=1218692718]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.18
+offset_top = 3.0
+offset_right = -2.8200073
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_vertical = 8
+texture = ExtResource("3_hdr_name")
+patch_margin_left = 16
+patch_margin_right = 16
 
-[node name="Panel" type="Panel" parent="UI" unique_id=1065141312]
-layout_mode = 0
-offset_left = 144.0
-offset_top = 528.0
-offset_right = 347.3023
-offset_bottom = 593.8239
-theme_override_styles/panel = SubResource("StyleBoxTexture_okacg")
+[node name="Header_Text" type="RichTextLabel" parent="Dialogue/DialogueBox/PortraitContainer/Background/Header_Avatar/Header_Text" unique_id=1621474288]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.4233093
+offset_right = -8.54628
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Name[/center]"
